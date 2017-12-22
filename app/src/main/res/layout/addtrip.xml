@@ -30,6 +30,7 @@
                 android:id="@+id/add_trip_estimation_amount"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:inputType="number"
                 android:hint="@string/hint_trip_estimation_amount" />
 
         </android.support.design.widget.TextInputLayout>
