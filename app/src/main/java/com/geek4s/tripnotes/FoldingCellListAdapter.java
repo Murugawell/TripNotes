@@ -7,12 +7,16 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.geek4s.tripnotes.bean.Trip;
 import com.github.aakira.expandablelayout.Utils;
 import com.ramotion.foldingcell.FoldingCell;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
 
@@ -20,14 +24,14 @@ import java.util.List;
  * Simple example of ListAdapter for using with Folding Cell
  * Adapter holds indexes of unfolded elements for correct work with default reusable views behavior
  */
-public class FoldingCellListAdapter extends ArrayAdapter<Item> {
+public class FoldingCellListAdapter extends ArrayAdapter<Trip> {
 
     private int OPENEDCELL = -1;
     private HashSet<Integer> unfoldedIndexes = new HashSet<>();
     private View.OnClickListener defaultRequestBtnClickListener;
 
 
-    public FoldingCellListAdapter(Context context, List<Item> objects) {
+    public FoldingCellListAdapter(Context context, List<Trip> objects) {
         super(context, 0, objects);
     }
 
@@ -47,7 +51,7 @@ public class FoldingCellListAdapter extends ArrayAdapter<Item> {
     @Override
     public View getView(final int position, View convertView, ViewGroup parent) {
         // get item for selected view
-        Item item = getItem(position);
+        Trip item = getItem(position);
         // if cell is exists - reuse it, if not - create the new one from resource
         FoldingCell cell = (FoldingCell) convertView;
         ViewHolder viewHolder;
@@ -57,14 +61,25 @@ public class FoldingCellListAdapter extends ArrayAdapter<Item> {
             LayoutInflater vi = LayoutInflater.from(getContext());
             cell = (FoldingCell) vi.inflate(R.layout.cell, parent, false);
             // binding view parts to view holder
-            viewHolder.price = (TextView) cell.findViewById(R.id.title_price);
-            viewHolder.time = (TextView) cell.findViewById(R.id.title_time_label);
-            viewHolder.date = (TextView) cell.findViewById(R.id.title_date_label);
-            viewHolder.fromAddress = (TextView) cell.findViewById(R.id.title_from_address);
-            viewHolder.toAddress = (TextView) cell.findViewById(R.id.title_to_address);
-            viewHolder.requestsCount = (TextView) cell.findViewById(R.id.title_people_count);
-            viewHolder.pledgePrice = (TextView) cell.findViewById(R.id.title_amount);
-            viewHolder.contentRequestBtn = (TextView) cell.findViewById(R.id.content_request_btn);
+            viewHolder.f_estimatedAmount = (TextView) cell.findViewById(R.id.title_estimateamount);
+            viewHolder.f_time = (TextView) cell.findViewById(R.id.title_time_label);
+            viewHolder.f_date = (TextView) cell.findViewById(R.id.title_date_label);
+            viewHolder.f_fromAddress = (TextView) cell.findViewById(R.id.title_from_address);
+            viewHolder.f_toAddress = (TextView) cell.findViewById(R.id.title_to_address);
+            viewHolder.f_peopleCount = (TextView) cell.findViewById(R.id.title_people_count);
+            viewHolder.f_tripAmount = (TextView) cell.findViewById(R.id.title_amount);
+            viewHolder.f_triptitle = (TextView) cell.findViewById(R.id.cell_title_trip_name_textview);
+            viewHolder.b_triptitle = (TextView) cell.findViewById(R.id.content_header_trip_name);
+            viewHolder.b_estimatedAmount = (TextView) cell.findViewById(R.id.content_estimated_amount);
+            viewHolder.b_tripAmount = (TextView) cell.findViewById(R.id.content_amount);
+            viewHolder.b_peopleCount = (TextView) cell.findViewById(R.id.content_people_count);
+            viewHolder.b_time = (TextView) cell.findViewById(R.id.content_created_time);
+            viewHolder.b_date = (TextView) cell.findViewById(R.id.content_created_date);
+            viewHolder.b_fromAddress = (TextView) cell.findViewById(R.id.content_from);
+            viewHolder.b_toAddress = (TextView) cell.findViewById(R.id.content_to);
+            viewHolder.b_addPeople = (Button) cell.findViewById(R.id.content_add_people_btn);
+
+
 //
 
             final FoldingCell finalCell = cell;
@@ -80,20 +95,37 @@ public class FoldingCellListAdapter extends ArrayAdapter<Item> {
                 }
             });
 
+            cell.setOnLongClickListener(new View.OnLongClickListener() {
+                @Override
+                public boolean onLongClick(View view) {
+                    Toast.makeText(getContext(), "Long", Toast.LENGTH_LONG).show();
+                    return false;
+                }
+            });
+
+
+            viewHolder.b_addPeople.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    new AddNewPeople(getContext()).addPeopleDialog();
+                }
+            });
+
+
             final RecyclerView recyclerView = (RecyclerView) cell.findViewById(R.id.recyclerView);
             recyclerView.addItemDecoration(new DividerItemDecoration(getContext()));
             recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
 
             final List<ItemModel> data = new ArrayList<>();
-            data.add(new ItemModel(
-                    "Person " + position,
-                    R.color.colorAccent,
-                    R.color.colorPrimary,
-                    Utils.createInterpolator(Utils.ACCELERATE_DECELERATE_INTERPOLATOR)));
-            data.add(new ItemModel(
-                    "Person " + position, R.color.colorAccent,
-                    R.color.colorPrimary,
-                    Utils.createInterpolator(Utils.LINEAR_OUT_SLOW_IN_INTERPOLATOR)));
+//            data.add(new ItemModel(
+//                    "Person " + position,
+//                    R.color.colorAccent,
+//                    R.color.colorPrimary,
+//                    Utils.createInterpolator(Utils.ACCELERATE_DECELERATE_INTERPOLATOR)));
+//            data.add(new ItemModel(
+//                    "Person " + position, R.color.colorAccent,
+//                    R.color.colorPrimary,
+//                    Utils.createInterpolator(Utils.LINEAR_OUT_SLOW_IN_INTERPOLATOR)));
             recyclerView.setAdapter(new RecyclerViewRecyclerAdapter(data));
 
             cell.setTag(viewHolder);
@@ -112,23 +144,34 @@ public class FoldingCellListAdapter extends ArrayAdapter<Item> {
 
         }
 
-        // bind data from selected element to view through view holder
-        viewHolder.price.setText(item.getTripname());
-        viewHolder.time.setText(item.getTime());
-        viewHolder.date.setText(item.getDate());
-        viewHolder.fromAddress.setText(item.getFromAddress());
-        viewHolder.toAddress.setText(item.getToAddress());
-        viewHolder.requestsCount.setText(String.valueOf(item.getRequestsCount()));
-        viewHolder.pledgePrice.setText(item.getNoofpeople());
 
-        // set custom btn handler for list item from that item
-        if (item.getRequestBtnClickListener() != null) {
-            viewHolder.contentRequestBtn.setOnClickListener(item.getRequestBtnClickListener());
-        } else {
-            // (optionally) add "default" handler if no handler found in item
-            viewHolder.contentRequestBtn.setOnClickListener(defaultRequestBtnClickListener);
+        try {
+            // bind data from selected element to view through view holder
+            // front side
+            viewHolder.f_triptitle.setText(item.getName());
+            viewHolder.f_estimatedAmount.setText(item.getEstimateAmount() + "");
+            Date d = new Date(item.getTime());
+            String tripCreatedDate = d.getDate() + "-" + (d.getMonth() + 1) + "-" + d.getYear();
+            String tripCreatedTime = d.getHours() + ":" + d.getMinutes();
+            viewHolder.f_date.setText(tripCreatedDate);
+            viewHolder.f_time.setText(tripCreatedTime);
+            viewHolder.f_fromAddress.setText(item.getFrom());
+            viewHolder.f_toAddress.setText(item.getTo());
+            viewHolder.f_peopleCount.setText(item.getPeoples().length + "");
+            viewHolder.f_tripAmount.setText(item.getAmountSpent() + "");
+
+            // back side
+            viewHolder.b_triptitle.setText(item.getName());
+            viewHolder.b_estimatedAmount.setText(item.getEstimateAmount() + "");
+            viewHolder.b_peopleCount.setText(item.getPeoples().length + "");
+            viewHolder.b_tripAmount.setText(item.getAmountSpent() + "");
+            viewHolder.b_date.setText(tripCreatedDate);
+            viewHolder.b_time.setText(tripCreatedTime);
+            viewHolder.b_fromAddress.setText(item.getFrom());
+            viewHolder.b_toAddress.setText(item.getTo());
+        } catch (Exception e) {
+            Toast.makeText(getContext(), e.toString(), Toast.LENGTH_LONG).show();
         }
-
 
         return cell;
     }
@@ -159,14 +202,25 @@ public class FoldingCellListAdapter extends ArrayAdapter<Item> {
 
     // View lookup cache
     private static class ViewHolder {
-        TextView price;
+        TextView f_estimatedAmount;
         TextView contentRequestBtn;
-        TextView pledgePrice;
-        TextView fromAddress;
-        TextView toAddress;
-        TextView requestsCount;
-        TextView date;
-        TextView time;
+        TextView f_tripAmount;
+        TextView f_fromAddress;
+        TextView f_toAddress;
+        TextView f_peopleCount;
+        TextView f_date;
+        TextView f_time;
+        TextView f_triptitle;
+        TextView b_triptitle;
+        TextView b_tripAmount;
+        TextView b_fromAddress;
+        TextView b_toAddress;
+        TextView b_peopleCount;
+        TextView b_estimatedAmount;
+        TextView b_date;
+        TextView b_time;
+        Button b_addPeople;
+
     }
 }
 

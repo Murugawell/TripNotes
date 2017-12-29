@@ -131,7 +131,7 @@ public class Item {
      */
     public static ArrayList<Item> getTestingList() {
         items = new ArrayList<>();
-//        items.add(new Item("₹40K", "₹7076", "Bangalore", "Pandichery", 3, "TODAY", "05:10 PM"));
+        items.add(new Item("₹40K", 7, "Bangalore", "Pandichery", 3, "TODAY", "05:10 PM"));
 //        items.add(new Item("₹23", "$116", "W 36th St, NY, 10015", "W 114th St, NY, 10037", 10, "TODAY", "11:10 AM"));
         return items;
 

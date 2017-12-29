@@ -16,4 +16,11 @@
     <color name="btnRequest">#ffbf12</color>
     <color name="black_overlay">#66000000</color>
     <color name="colorMainTitleBackground">#504377</color>
+    <color name="trip_people_count">#adafb1</color>
+    <color name="trip_amount">#adafb1</color>
+    <color name="contentDividerDarkLine">#c3c3c3</color>
+
+
+
+
 </resources>

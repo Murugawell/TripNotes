@@ -30,37 +30,48 @@ public class MainActivity extends AppCompatActivity {
 
     private FoldingCellListAdapter adapter;
     public static FoldingCellListAdapter adap;
-    Datas datas;
-    ArrayList<Trip> trips;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         getWindow().requestFeature(Window.FEATURE_CONTENT_TRANSITIONS);
+
         try {
             setContentView(R.layout.activity_main);
         } catch (Exception e) {
             e.printStackTrace();
         }
+
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
+
         final Context con = this;
-        //Initializing Data
-        datas = new Datas(this);
-        datas.open();
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 new AddNewTrip(con).addTripDialog();
             }
         });
-        //Get all trip datas in arrayList
-        trips = datas.getAllTrips();
+
+
         // get our list view
         ListView theListView = (ListView) findViewById(R.id.mainListView);
+
         // prepare elements to display
         final ArrayList<Item> items = Item.getTestingList();
+        ArrayList<Trip> allTrips = null;
+        Datas da = new Datas(this);
+        try {
+            da.open();
+            allTrips = da.getAllTrips();
+            Toast.makeText(getApplicationContext(), allTrips.size() + "", Toast.LENGTH_LONG).show();
+        } catch (Exception e) {
+            Toast.makeText(getApplicationContext(), e.toString(), Toast.LENGTH_LONG).show();
+        }
+
 /*
 
         // add custom btn handler to first list item
@@ -71,9 +82,9 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 */
-        if (items.size() > 0 && items != null) {
+        if (allTrips != null) {
             // create custom adapter that holds elements and their state (we need hold a id's of unfolded elements for reusable elements)
-            adapter = new FoldingCellListAdapter(this, items);
+            adapter = new FoldingCellListAdapter(this, allTrips);
             adap = adapter;
             // add default btn handler for each request btn on each item if custom handler not found
             adapter.setDefaultRequestBtnClickListener(new View.OnClickListener() {
@@ -107,16 +118,23 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_main, menu);
         return true;
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
+        // Handle action bar item clicks here. The action bar will
+        // automatically handle clicks on the Home/Up button, so long
+        // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
+
+        //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
             return true;
         }
+
         return super.onOptionsItemSelected(item);
     }
 
@@ -124,9 +142,5 @@ public class MainActivity extends AppCompatActivity {
         adap.notifyDataSetChanged();
     }
 
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        datas.close();
-    }
+
 }

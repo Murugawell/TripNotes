@@ -4,11 +4,11 @@
     <string name="order_id_mock" translatable="false"># 1234–5678</string>
     <string name="price_mock" translatable="false">$25</string>
     <string name="people_count_mock" translatable="false">5</string>
-    <string name="people_count_badge" translatable="false">PEOPLE</string>
+    <string name="people_count_displaylabel" translatable="false">PEOPLE</string>
     <string name="toDoList_mock" translatable="false">5/10</string>
-    <string name="toDoList_badge" translatable="false">LIST</string>
+    <string name="toDoList_displaylabel" translatable="false">LIST</string>
     <string name="amount_mock" translatable="false">$150</string>
-    <string name="amount_badge" translatable="false">AMOUNT</string>
+    <string name="amount_displaylabel" translatable="false">AMOUNT</string>
     <string name="creator_badge" translatable="false">CREATOR</string>
     <string name="creator_name_mock" translatable="false">You</string>
     <string name="rating_mock" translatable="false">(26)</string>
@@ -31,4 +31,16 @@
     <string name="hint_trip_estimation_amount">Enter estimate amount</string>
     <string name="hint_trip_from">From</string>
     <string name="hint_trip_to">To</string>
+    <string name="hint_person_name">Enter Person Name</string>
+    <string name="add_person_hint_share">Share equally</string>
+    <string name="add_person_hint_assign_manual">Assign Manually</string>
+    <string name="hint_add_amount_person_name">Enter person name</string>
+    <string name="hint_add_amount_for">Enter Amount For</string>
+    <string name="hint_add_amount_value">Enter the amount</string>
+    <string name="estimatedAmount">ESTIMATED</string>
+    <string name="people_list">PEOPLE</string>
+    <string name="created_date">CREATED DATE</string>
+    <string name="content_created_time">CREATED TIME</string>
+    <string name="choose_type_of_sharing">Choose Type Of Sharing</string>
+    <string name="hint_person_assign_amount">Assign amount</string>
 </resources>

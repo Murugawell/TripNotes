@@ -45,7 +45,7 @@
                 android:paddingTop="20dp">
 
                 <TextView
-                    android:id="@+id/title_price"
+                    android:id="@+id/title_estimateamount"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignParentLeft="true"
@@ -138,64 +138,96 @@
                     android:textSize="16sp" />
 
 
-                <TextView
-                    android:id="@+id/title_people_count"
-                    style="@style/TitleBadgeText"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentBottom="true"
-                    android:layout_alignParentLeft="true"
-                    android:layout_alignParentStart="true" />
+                <ImageView
+                    android:id="@+id/title_from_to_peoplecount_divider"
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:layout_below="@id/title_to_address"
+                    android:layout_marginBottom="5dp"
+                    android:layout_marginTop="10dp"
+                    android:alpha="1"
+                    android:src="@color/contentDividerDarkLine" />
 
-                <TextView
-                    android:id="@+id/title_people_count_display_label"
-                    style="@style/TitleBadgeTitle"
-                    android:layout_width="wrap_content"
+                <LinearLayout
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_above="@id/title_people_count"
-                    android:layout_alignLeft="@id/title_people_count"
-                    android:layout_alignStart="@id/title_people_count"
-                    android:text="@string/people_count_badge" />
+                    android:layout_below="@+id/title_from_to_peoplecount_divider"
+                    android:orientation="horizontal"
+                    android:weightSum="3">
 
-                <TextView
-                    android:id="@+id/title_todolist"
-                    style="@style/TitleBadgeText"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentBottom="true"
-                    android:layout_alignParentEnd="true"
-                    android:layout_alignParentRight="true"
-                    android:text="@string/toDoList_mock" />
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:gravity="center"
+                        android:orientation="vertical">
 
-                <TextView
-                    android:id="@+id/title_todolist_display_label"
-                    style="@style/TitleBadgeTitle"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_above="@id/title_todolist"
-                    android:layout_alignLeft="@id/title_todolist"
-                    android:layout_alignStart="@id/title_todolist"
-                    android:text="@string/toDoList_badge" />
+                        <TextView
+                            android:id="@+id/content_people_count_display_label"
+                            style="@style/trip_people_count_diaplay_style"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_below="@+id/title_from_to_peoplecount_divider"
+                            android:layout_marginTop="10dp"
+                            android:text="@string/people_count_displaylabel" />
 
-                <TextView
-                    android:id="@+id/title_amount"
-                    style="@style/TitleBadgeText"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentBottom="true"
-                    android:layout_centerHorizontal="true" />
 
-                <TextView
-                    style="@style/TitleBadgeTitle"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_above="@id/title_amount"
-                    android:layout_alignLeft="@id/title_amount"
-                    android:layout_alignStart="@id/title_amount"
-                    android:text="@string/amount_badge"
-                    android:id="@+id/title_amount_display_label"
-                    />
+                        <TextView
+                            android:id="@+id/title_people_count"
+                            style="@style/TitleBadgeText"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_below="@+id/content_people_count_display_label" />
 
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:gravity="center"
+                        android:orientation="vertical"
+                        android:visibility="invisible">
+
+                        <TextView
+                            android:id="@+id/content_estimated_amount"
+                            style="@style/TitleBadgeText"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/toDoList_mock" />
+
+                        <TextView
+                            android:id="@+id/content_estimated_amount_display_label"
+                            style="@style/TitleBadgeTitle"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/toDoList_displaylabel" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:gravity="center"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:id="@+id/content_amount_display_label"
+                            style="@style/trip_amount_diaplay_style"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="10dp"
+                            android:text="@string/amount_displaylabel" />
+
+
+                        <TextView
+                            android:id="@+id/title_amount"
+                            style="@style/TitleBadgeText"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content" />
+                    </LinearLayout>
+
+                </LinearLayout>
             </RelativeLayout>
 
         </LinearLayout>

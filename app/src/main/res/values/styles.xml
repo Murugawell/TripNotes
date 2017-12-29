@@ -45,4 +45,15 @@
         <item name="android:textSize">12dp</item>
     </style>
 
+    <style name="trip_people_count_diaplay_style">
+        <item name="android:textColor">@color/trip_people_count</item>
+        <item name="android:textSize">12dp</item>
+    </style>
+
+    <style name="trip_amount_diaplay_style">
+        <item name="android:textColor">@color/trip_amount</item>
+        <item name="android:textSize">12dp</item>
+    </style>
+
+
 </resources>
