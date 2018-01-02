@@ -55,5 +55,16 @@
         <item name="android:textSize">12dp</item>
     </style>
 
+    <style name="ContentTitleText" parent="AppTheme">
+        <item name="android:textColor">@color/titleBadgeText</item>
+        <item name="android:textSize">14dp</item>
+    </style>
+
+    <style name="ContentText" parent="AppTheme">
+        <item name="android:textColor">@color/titleBadgeText</item>
+        <item name="android:textSize">16dp</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+
 
 </resources>

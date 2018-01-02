@@ -25,10 +25,12 @@ import com.geek4s.tripnotes.bean.Trip;
 import com.ramotion.foldingcell.FoldingCell;
 
 import java.util.ArrayList;
+import java.util.Collections;
 
 public class MainActivity extends AppCompatActivity {
-
-    private FoldingCellListAdapter adapter;
+    public static ArrayList<Trip> allTrips = null;
+    static ListView theListView;
+    private static FoldingCellListAdapter adapter;
     public static FoldingCellListAdapter adap;
 
     @Override
@@ -58,20 +60,11 @@ public class MainActivity extends AppCompatActivity {
 
 
         // get our list view
-        ListView theListView = (ListView) findViewById(R.id.mainListView);
+        theListView = (ListView) findViewById(R.id.mainListView);
 
         // prepare elements to display
-        final ArrayList<Item> items = Item.getTestingList();
-        ArrayList<Trip> allTrips = null;
-        Datas da = new Datas(this);
-        try {
-            da.open();
-            allTrips = da.getAllTrips();
-            Toast.makeText(getApplicationContext(), allTrips.size() + "", Toast.LENGTH_LONG).show();
-        } catch (Exception e) {
-            Toast.makeText(getApplicationContext(), e.toString(), Toast.LENGTH_LONG).show();
-        }
 
+        getTripListFromDB(this);
 /*
 
         // add custom btn handler to first list item
@@ -82,23 +75,7 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 */
-        if (allTrips != null) {
-            // create custom adapter that holds elements and their state (we need hold a id's of unfolded elements for reusable elements)
-            adapter = new FoldingCellListAdapter(this, allTrips);
-            adap = adapter;
-            // add default btn handler for each request btn on each item if custom handler not found
-            adapter.setDefaultRequestBtnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    Toast.makeText(getApplicationContext(), "DEFAULT HANDLER FOR ALL BUTTONS", Toast.LENGTH_SHORT).show();
-                }
-            });
-
-            // set elements to adapter
-            theListView.setAdapter(adapter);
-
-        }
-
+        showListOfTrips(this);
 /*
         // set on click event listener to list view
         theListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -112,6 +89,33 @@ public class MainActivity extends AppCompatActivity {
         });
 */
 
+
+    }
+
+    public static void getTripListFromDB(Context context) {
+        Datas da = new Datas(context);
+        try {
+            da.open();
+            allTrips = da.getAllTrips();
+            Collections.reverse(allTrips);
+            Toast.makeText(context, allTrips.size() + "", Toast.LENGTH_LONG).show();
+        } catch (Exception e) {
+            Toast.makeText(context, e.toString(), Toast.LENGTH_LONG).show();
+        }
+
+    }
+
+    public static void showListOfTrips(Context context) {
+        if (allTrips != null) {
+            if (allTrips.size() > 0) {
+                // create custom adapter that holds elements and their state (we need hold a id's of unfolded elements for reusable elements)
+                adapter = new FoldingCellListAdapter(context, allTrips);
+                adap = adapter;
+
+                // set elements to adapter
+                theListView.setAdapter(adapter);
+            }
+        }
 
     }
 
@@ -136,10 +140,6 @@ public class MainActivity extends AppCompatActivity {
         }
 
         return super.onOptionsItemSelected(item);
-    }
-
-    public static void adataperChanges() {
-        adap.notifyDataSetChanged();
     }
 
 

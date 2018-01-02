@@ -39,8 +39,11 @@
     <string name="hint_add_amount_value">Enter the amount</string>
     <string name="estimatedAmount">ESTIMATED</string>
     <string name="people_list">PEOPLE</string>
-    <string name="created_date">CREATED DATE</string>
-    <string name="content_created_time">CREATED TIME</string>
+    <string name="created_date">DATE</string>
+    <string name="content_created_time">TIME</string>
     <string name="choose_type_of_sharing">Choose Type Of Sharing</string>
     <string name="hint_person_assign_amount">Assign amount</string>
+    <string name="content_created_day">DAY</string>
+    <string name="createdTimeDetails">CREATED DATE &amp; TIME</string>
+    <string name="tripFromTo">ADDRESS</string>
 </resources>

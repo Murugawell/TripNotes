@@ -3,7 +3,9 @@
 <android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content">
+    android:layout_height="wrap_content"
+    android:elevation="8dp"
+    android:foreground="?android:attr/selectableItemBackground">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -33,8 +35,9 @@
 
             <!-- LEFT TITLE PART -->
             <RelativeLayout
+                android:id="@+id/title_left_side_rel_layout"
                 android:layout_width="match_parent"
-                android:layout_height="155dp"
+                android:layout_height="match_parent"
                 android:layout_weight="3"
                 android:background="@color/bgTitleLeft"
                 android:gravity="center_horizontal"
@@ -50,28 +53,44 @@
                     android:layout_height="wrap_content"
                     android:layout_alignParentLeft="true"
                     android:layout_alignParentStart="true"
-                    android:textColor="@android:color/white"
-                    android:textSize="26sp" />
-
-                <TextView
-                    android:id="@+id/title_time_label"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentBottom="true"
-                    android:layout_alignParentLeft="true"
-                    android:layout_alignParentStart="true"
-                    android:textColor="@android:color/white"
-                    android:textSize="14sp" />
+                    android:clickable="true"
+                    android:textColor="@color/colorEstimateAmount"
+                    android:textSize="24sp" />
 
                 <TextView
                     android:id="@+id/title_date_label"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_above="@id/title_time_label"
                     android:layout_alignParentLeft="true"
                     android:layout_alignParentStart="true"
-                    android:textColor="@android:color/white"
-                    android:textSize="12sp" />
+                    android:layout_below="@+id/title_estimateamount"
+                    android:layout_marginTop="20dp"
+                    android:textColor="@color/yellow1"
+                    android:textStyle="bold|italic"
+                    android:textSize="14sp" />
+
+
+                <TextView
+                    android:id="@+id/title_time_label"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentLeft="true"
+                    android:layout_alignParentStart="true"
+                    android:layout_below="@+id/title_date_label"
+                    android:textColor="@color/colorDateTime"
+                    android:textSize="14sp"
+                    android:textStyle="bold" />
+
+
+                <TextView
+                    android:id="@+id/title_day_label"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentLeft="true"
+                    android:layout_alignParentStart="true"
+                    android:layout_below="@+id/title_time_label"
+                    android:textColor="@color/colorDateTime"
+                    android:textSize="14sp" />
 
 
             </RelativeLayout>
@@ -80,7 +99,7 @@
             <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_weight="1"
+                android:layout_weight="1.3"
                 android:background="@color/bgTitleRight"
                 android:paddingBottom="20dp"
                 android:paddingEnd="20dp"

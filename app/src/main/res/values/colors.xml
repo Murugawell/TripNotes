@@ -19,8 +19,12 @@
     <color name="trip_people_count">#adafb1</color>
     <color name="trip_amount">#adafb1</color>
     <color name="contentDividerDarkLine">#c3c3c3</color>
-
-
+    <color name="colorEstimateAmount">#FFFFFF</color>
+    <color name="colorDateTime">#FFFF9900</color>
+    <color name="white">#FFFFFFFF</color>
+    <color name="background1">#d32b9b70</color>
+    <color name="yellow1">#f5f293</color>
+    <color name="green1">#40e51f</color>
 
 
 </resources>

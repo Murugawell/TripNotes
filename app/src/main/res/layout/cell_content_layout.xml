@@ -149,11 +149,11 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/bgContent"
+        android:background="@color/black_overlay"
         android:orientation="vertical"
         android:paddingBottom="6dp"
-        android:paddingLeft="20dp"
-        android:paddingRight="20dp"
+        android:paddingLeft="5dp"
+        android:paddingRight="5dp"
         android:paddingTop="9dp">
 
         <!-- avatar and name part -->
@@ -218,183 +218,269 @@
             android:src="@color/contentDividerLine"
             android:visibility="gone" />
 
-        <LinearLayout
+        <android.support.v7.widget.CardView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical">
-
-            <TextView
-                android:id="@+id/content_people_list_textview"
-                style="@style/ContentMainBadgeTitle"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentLeft="true"
-                android:layout_alignParentStart="true"
-                android:layout_marginBottom="5dp"
-                android:text="@string/people_list" />
-
-            <ImageView
-                android:layout_width="match_parent"
-                android:layout_height="1dp"
-                android:layout_marginBottom="6dp"
-                android:src="@color/contentDividerLine" />
-
-            <!--recyclerview -->
-
-            <android.support.v7.widget.RecyclerView xmlns:android="http://schemas.android.com/apk/res/android"
-                android:id="@+id/recyclerView"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:scrollbars="vertical" />
-
-            <android.support.v7.widget.AppCompatButton
-                android:id="@+id/content_add_people_btn"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="end"
-                android:drawableLeft="@drawable/fab_add"
-                android:drawableStart="@drawable/fab_add"
-                android:text="Add People" />
-
-        </LinearLayout>
-        <!-- addresses part -->
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:baselineAligned="false"
-            android:orientation="horizontal">
-
-
-        </LinearLayout>
-
-        <!-- divider line -->
-        <ImageView
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:layout_marginBottom="6dp"
-            android:layout_marginTop="7dp"
-            android:src="@color/contentDividerLine" />
-
-        <!-- dates part -->
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:weightSum="2">
+            android:layout_marginTop="10dp"
+            android:clickable="true"
+            android:foreground="?android:attr/selectableItemBackground"
+            app:cardCornerRadius="2dp"
+            app:cardElevation="4dp"
+            app:cardPreventCornerOverlap="false">
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:gravity="start"
-                android:orientation="vertical">
+                android:orientation="vertical"
+                android:paddingBottom="5dp"
+                android:paddingLeft="20dp"
+                android:paddingRight="20dp">
+
 
                 <TextView
-                    android:id="@+id/content_created_date_displaylabel"
-                    style="@style/trip_people_count_diaplay_style"
+                    android:id="@+id/content_people_list_textview"
+                    style="@style/ContentTitleText"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_alignParentLeft="true"
+                    android:layout_alignParentStart="true"
                     android:layout_marginTop="10dp"
-                    android:text="@string/created_date" />
+                    android:text="@string/people_list" />
 
 
-                <TextView
-                    android:id="@+id/content_created_date"
-                    style="@style/TitleBadgeText"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content" />
+                <ImageView
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:layout_marginBottom="6dp"
+                    android:layout_marginTop="7dp"
+                    android:src="@color/contentDividerLine" />
 
-            </LinearLayout>
+                <!--recyclerview -->
 
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:gravity="start"
-                android:orientation="vertical">
+                <android.support.v7.widget.RecyclerView xmlns:android="http://schemas.android.com/apk/res/android"
+                    android:id="@+id/recyclerView"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:scrollbars="vertical" />
 
-                <TextView
-                    android:id="@+id/content_created_time_displaylabel"
-                    style="@style/TitleBadgeTitle"
+                <android.support.v7.widget.AppCompatButton
+                    android:id="@+id/content_add_people_btn"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="10dp"
-                    android:text="@string/content_created_time" />
-
-                <TextView
-                    android:id="@+id/content_created_time"
-                    style="@style/TitleBadgeText"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content" />
+                    android:layout_gravity="end"
+                    android:drawableLeft="@drawable/fab_add"
+                    android:drawableStart="@drawable/fab_add"
+                    android:text="Add People" />
 
             </LinearLayout>
+        </android.support.v7.widget.CardView>
 
+        <!-- created dates part -->
 
-        </LinearLayout>
-
-
-        <!-- divider line -->
-        <ImageView
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:layout_marginBottom="6dp"
-            android:layout_marginTop="7dp"
-            android:src="@color/contentDividerLine" />
-
-        <LinearLayout
+        <android.support.v7.widget.CardView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:weightSum="2">
+            android:layout_marginTop="10dp"
+            android:clickable="true"
+            android:foreground="?android:attr/selectableItemBackground"
+            app:cardCornerRadius="2dp"
+            app:cardElevation="4dp">
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:gravity="start"
-                android:orientation="vertical">
+                android:orientation="vertical"
+                android:paddingBottom="10dp"
+                android:paddingLeft="20dp"
+                android:paddingRight="20dp">
 
                 <TextView
-                    android:id="@+id/content_from_displaylabel"
-                    style="@style/trip_people_count_diaplay_style"
+                    android:id="@+id/content_created_date_time_title"
+                    style="@style/ContentTitleText"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="10dp"
-                    android:text="@string/from_badge" />
+                    android:text="@string/createdTimeDetails" />
 
 
-                <TextView
-                    android:id="@+id/content_from"
-                    style="@style/TitleBadgeText"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content" />
+                <!-- divider line -->
+                <ImageView
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:layout_marginBottom="6dp"
+                    android:layout_marginTop="7dp"
 
+                    android:src="@color/contentDividerLine" />
+
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:weightSum="3">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:gravity="start"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:id="@+id/content_created_date_displaylabel"
+                            style="@style/ContentTitleText"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/created_date" />
+
+
+                        <TextView
+                            android:id="@+id/content_created_date"
+                            style="@style/ContentText"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content" />
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:gravity="start"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:id="@+id/content_created_time_displaylabel"
+                            style="@style/ContentTitleText"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/content_created_time" />
+
+                        <TextView
+                            android:id="@+id/content_created_time"
+                            style="@style/ContentText"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content" />
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:gravity="start"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:id="@+id/content_created_day_displaylabel"
+                            style="@style/ContentTitleText"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/content_created_day" />
+
+                        <TextView
+                            android:id="@+id/content_created_day"
+                            style="@style/ContentText"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content" />
+
+                    </LinearLayout>
+
+
+                </LinearLayout>
             </LinearLayout>
+        </android.support.v7.widget.CardView>
+
+        <android.support.v7.widget.CardView
+            android:id="@+id/card2"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:clickable="true"
+            android:foreground="?android:attr/selectableItemBackground"
+            app:cardCornerRadius="2dp"
+            app:cardElevation="4dp">
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:gravity="start"
-                android:orientation="vertical">
+                android:orientation="vertical"
+                android:paddingBottom="10dp"
+                android:paddingLeft="20dp"
+                android:paddingRight="20dp">
 
                 <TextView
-                    android:id="@+id/content_to_displaylabel"
-                    style="@style/TitleBadgeTitle"
+                    android:id="@+id/content_from_to_address_title"
+                    style="@style/ContentTitleText"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="10dp"
-                    android:text="@string/to_badge" />
+                    android:text="@string/tripFromTo" />
 
-                <TextView
-                    android:id="@+id/content_to"
-                    style="@style/TitleBadgeText"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content" />
 
+                <!-- divider line -->
+                <ImageView
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:layout_marginBottom="6dp"
+                    android:layout_marginTop="7dp"
+                    android:src="@color/contentDividerLine" />
+
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:weightSum="2">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:gravity="start"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:id="@+id/content_from_displaylabel"
+                            style="@style/ContentTitleText"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/from_badge" />
+
+
+                        <TextView
+                            android:id="@+id/content_from"
+                            style="@style/ContentText"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content" />
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:gravity="start"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:id="@+id/content_to_displaylabel"
+                            style="@style/ContentTitleText"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/to_badge" />
+
+                        <TextView
+                            android:id="@+id/content_to"
+                            style="@style/ContentText"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content" />
+
+                    </LinearLayout>
+
+                </LinearLayout>
             </LinearLayout>
-
-        </LinearLayout>
+        </android.support.v7.widget.CardView>
 
         <LinearLayout
             android:layout_width="match_parent"

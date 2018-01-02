@@ -22,6 +22,7 @@ import java.util.Calendar;
 public class AddNewTrip {
 
     Context context;
+
     AddNewTrip(Context con) {
         context = con;
     }
@@ -44,7 +45,7 @@ public class AddNewTrip {
         final EditText editText_tripFrom = (EditText) promptsView.findViewById(R.id.add_trip_from);
         final EditText editText_tripTo = (EditText) promptsView.findViewById(R.id.add_trip_to);
         Button add = (Button) promptsView.findViewById(R.id.trip_add_ok);
-        Button cancel = (Button) promptsView.findViewById(R.id.trip_add_cancel);
+        final Button cancel = (Button) promptsView.findViewById(R.id.trip_add_cancel);
         alert.setTitle("Add New Trip");
         add.setText("Add");
         cancel.setText("Cancel");
@@ -65,6 +66,8 @@ public class AddNewTrip {
                 } else {
                     String output = createTrip(triptitle, tripestimateamount, from, to);
                     Toast.makeText(context, output, Toast.LENGTH_LONG).show();
+                    MainActivity.getTripListFromDB(context);
+                    MainActivity.showListOfTrips(context);
                     alert.cancel();
                 }
             }
@@ -96,12 +99,10 @@ public class AddNewTrip {
                 jsonObject.put("time", Calendar.getInstance().getTimeInMillis());
                 datas.createTrip(tripTitle, jsonObject.toString());
                 s = "Successfully created";
-            }
-            else {
+            } else {
                 s = "Already there is a trip in name of " + tripTitle;
             }
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             s = e.getMessage();
         }
         datas.close();
