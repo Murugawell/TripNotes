@@ -15,8 +15,12 @@ import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.geek4s.tripnotes.bean.People;
 import com.geek4s.tripnotes.bean.Trip;
 import com.ramotion.foldingcell.FoldingCell;
+
+import org.json.JSONArray;
+import org.json.JSONException;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -58,7 +62,7 @@ public class FoldingCellListAdapter extends ArrayAdapter<Trip> {
         Trip item = getItem(position);
         // if cell is exists - reuse it, if not - create the new one from resource
         FoldingCell cell = (FoldingCell) convertView;
-        ViewHolder viewHolder;
+        final ViewHolder viewHolder;
 
         if (cell == null) {
             viewHolder = new ViewHolder();
@@ -115,7 +119,7 @@ public class FoldingCellListAdapter extends ArrayAdapter<Trip> {
             viewHolder.b_addPeople.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    new AddNewPeople(getContext()).addPeopleDialog();
+                    new AddNewPeople(getContext(), viewHolder.b_triptitle.getText().toString()).addPeopleDialog();
                 }
             });
 
@@ -124,7 +128,7 @@ public class FoldingCellListAdapter extends ArrayAdapter<Trip> {
             recyclerView.addItemDecoration(new DividerItemDecoration(getContext()));
             recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
 
-            final List<ItemModel> data = new ArrayList<>();
+            final List<People> peopleList = convertJSONARRAYtoLIST(item.getPeoples());
 //            data.add(new ItemModel(
 //                    "Person " + position,
 //                    R.color.colorAccent,
@@ -134,7 +138,7 @@ public class FoldingCellListAdapter extends ArrayAdapter<Trip> {
 //                    "Person " + position, R.color.colorAccent,
 //                    R.color.colorPrimary,
 //                    Utils.createInterpolator(Utils.LINEAR_OUT_SLOW_IN_INTERPOLATOR)));
-            recyclerView.setAdapter(new RecyclerViewRecyclerAdapter(data));
+            recyclerView.setAdapter(new RecyclerViewRecyclerAdapter(peopleList, item));
 
             cell.setTag(viewHolder);
 
@@ -181,6 +185,14 @@ public class FoldingCellListAdapter extends ArrayAdapter<Trip> {
         }
 
         return cell;
+    }
+
+    private List<People> convertJSONARRAYtoLIST(People[] peoplesJSON) {
+        List<People> list = new ArrayList<>();
+        for (int i = 0; i < peoplesJSON.length; i++) {
+            list.add(i, peoplesJSON[i]);
+        }
+        return list;
     }
 
     // simple methods for register cell state changes

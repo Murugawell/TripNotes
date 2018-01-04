@@ -34,6 +34,6 @@ public class RecyclerViewActivity extends AppCompatActivity {
                 "1 ACCELERATE_INTERPOLATOR", R.color.colorAccent,
                 R.color.colorPrimary,
                 Utils.createInterpolator(Utils.LINEAR_OUT_SLOW_IN_INTERPOLATOR)));
-        recyclerView.setAdapter(new RecyclerViewRecyclerAdapter(data));
+//        recyclerView.setAdapter(new RecyclerViewRecyclerAdapter(data));
     }
 }
