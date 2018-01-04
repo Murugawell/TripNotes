@@ -46,4 +46,5 @@
     <string name="content_created_day">DAY</string>
     <string name="createdTimeDetails">CREATED DATE &amp; TIME</string>
     <string name="tripFromTo">ADDRESS</string>
+    <string name="addNewSpent">Add New Spent</string>
 </resources>

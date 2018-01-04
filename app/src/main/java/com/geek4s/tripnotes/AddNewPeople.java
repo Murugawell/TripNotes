@@ -4,6 +4,7 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.support.design.widget.Snackbar;
 import android.support.design.widget.TextInputLayout;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
@@ -13,14 +14,24 @@ import android.widget.RadioGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.geek4s.tripnotes.bean.People;
+import com.geek4s.tripnotes.bean.Trip;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
 /**
  * Created by Murugavel on 12/29/2017.
  */
 public class AddNewPeople {
-    Context context;
 
-    AddNewPeople(Context con) {
+    Context context;
+    String tripName;
+
+    AddNewPeople(Context con, String tripName) {
         context = con;
+        this.tripName = tripName;
     }
 
     public void addPeopleDialog() {
@@ -74,12 +85,19 @@ public class AddNewPeople {
                 } else if (radio[0].length() <= 0) {
                     Snackbar.make(view, "Please choose type of sharing", Snackbar.LENGTH_SHORT).show();
 
-                } else if (radio[0].equalsIgnoreCase("assign manually") && editText_assignAmount.getText().length() <= 0) {
+                } else if (radio[0].equalsIgnoreCase("assign manually") && editText_assignAmount.getText().toString().trim().length() <= 0) {
                     Snackbar.make(view, "Please enter amount", Snackbar.LENGTH_SHORT).show();
 
                 } else {
-                    // code to add people
-                    Toast.makeText(context, radio[0], Toast.LENGTH_LONG).show();
+                    String name = triptitle;
+                    boolean b = true;
+                    float maxAmount = 0;
+                    if (radio[0].equalsIgnoreCase("assign manually")) {
+                        b = false;
+                        maxAmount = Float.parseFloat(editText_assignAmount.getText().toString().trim());
+                    }
+                    String s = addPeople(name, b, maxAmount);
+                    Toast.makeText(context, s, Toast.LENGTH_LONG).show();
                     alert.cancel();
                 }
             }
@@ -94,6 +112,66 @@ public class AddNewPeople {
 
         alert.show();
 
+    }
+
+    private String addPeople(String name, boolean b, float maxAmount) {
+        Datas datas = new Datas(context);
+        datas.open();
+        Trip trip = datas.getTrip(tripName);
+        if (trip == null) {
+            return "Invalid Trip";
+        }
+        try {
+            JSONObject jsonObject = trip.getTripJSON();
+            JSONArray jsonArrayPeople = trip.getPeoplesJSON();
+            Log.i("First Array", jsonArrayPeople.toString());
+            JSONObject jsonObjectPeople = new JSONObject();
+            jsonObjectPeople.put("name", name);
+            jsonObjectPeople.put("maxamount", maxAmount);
+            jsonObjectPeople.put("isShared", b);
+            jsonObjectPeople.put("amountSpent", new JSONArray());
+            jsonArrayPeople.put(jsonObjectPeople);
+            jsonArrayPeople = getNewAmounts(jsonArrayPeople, trip);
+            Log.i("Second Array", jsonArrayPeople.toString());
+            jsonObject.put("people", jsonArrayPeople);
+            datas.deleteTrip(tripName);
+            datas.createTrip(tripName, jsonObject.toString());
+            Toast.makeText(context, jsonObject.toString(), Toast.LENGTH_LONG).show();
+            Toast.makeText(context, jsonObject.toString(), Toast.LENGTH_LONG).show();
+            Toast.makeText(context, jsonObject.toString(), Toast.LENGTH_LONG).show();
+            return "Successfully Added";
+        }
+        catch (Exception e) {
+            return e.toString();
+        }
+    }
+
+    private JSONArray getNewAmounts(JSONArray jsonArray, Trip trip) {
+        JSONArray newJsonArray = new JSONArray();
+        Log.i("Middle Array", jsonArray.toString());
+        try {
+            float shareAmount = trip.getEstimateAmount();
+            int tPeople = jsonArray.length();
+            for (int i = 0; i < jsonArray.length(); i++) {
+                JSONObject jsonObject = (jsonArray.getJSONObject(i));
+                Log.i("First Object", jsonObject.toString());
+                if (!jsonObject.getBoolean("isShared")) {
+                    shareAmount -= jsonObject.getDouble("maxamount");
+                    tPeople--;
+                }
+            }
+            shareAmount /= tPeople ;
+            for (int i = 0; i < jsonArray.length(); i++) {
+                JSONObject jsonObject = (jsonArray.getJSONObject(i));
+                Log.i("Second Object", jsonObject.toString());
+                if (jsonObject.getBoolean("isShared")) {
+                    jsonObject.put("maxamount", shareAmount);
+                }
+                newJsonArray.put(jsonObject);
+            }
+        }
+        catch (Exception e) {}
+        return newJsonArray;
     }
 
 }

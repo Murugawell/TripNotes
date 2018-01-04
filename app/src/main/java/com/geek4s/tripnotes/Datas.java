@@ -71,7 +71,7 @@ public class Datas {
     public long deleteTrip(String name) {
         Boolean b = check(name);
         if (b)
-            ourDatabase.execSQL("delete from " + DATABASE_TABLE + " where type='" + name + "';");
+            ourDatabase.execSQL("delete from " + DATABASE_TABLE + " where name='" + name + "';");
         else
             return 100;
         return 1;
@@ -167,7 +167,8 @@ public class Datas {
                 String name = jsonObject.getString("name");
                 Map<String, Float> map = getAmounts(jsonObject.getJSONArray("amountSpent"));
                 float maxAmount = (float) jsonObject.getDouble("maxamount");
-                peoples[i] = new People(name, maxAmount, map);
+                boolean isShared = jsonObject.getBoolean("isShared");
+                peoples[i] = new People(name, maxAmount, isShared, map);
             }
         } catch (Exception e) {
         }

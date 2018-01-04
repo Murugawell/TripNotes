@@ -1,5 +1,8 @@
 package com.geek4s.tripnotes.bean;
 
+import org.json.JSONArray;
+import org.json.JSONObject;
+
 /**
  * Created by Rakesh on 12/22/2017.
  */
@@ -76,5 +79,35 @@ public class Trip {
             total += people.getTotalAmountSpent();
         }
         return total;
+    }
+
+    public JSONObject getTripJSON() {
+        JSONObject jsonObject = new JSONObject();
+        try {
+            jsonObject.put("estimatedamount", estimateAmount);
+            jsonObject.put("from", from);
+            jsonObject.put("to", to);
+            JSONArray jsonArray = getPeoplesJSON();
+            jsonObject.put("people", jsonArray);
+            jsonObject.put("time", time);
+        }
+        catch (Exception e) {}
+        return jsonObject;
+    }
+
+    public JSONArray getPeoplesJSON() {
+        JSONArray jsonArray = new JSONArray();
+        try {
+            for (People people : peoples) {
+                JSONObject jsonObject = new JSONObject();
+                jsonObject.put("name", people.getName());
+                jsonObject.put("maxamount", people.getMaxAmount());
+                jsonObject.put("isShared", people.getIsShared());
+                jsonObject.put("amountSpent", people.getAmountSpentJSON());
+                jsonArray.put(jsonObject);
+            }
+        }
+        catch (Exception e) {}
+        return jsonArray;
     }
 }
