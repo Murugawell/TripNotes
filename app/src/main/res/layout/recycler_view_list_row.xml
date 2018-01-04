@@ -45,8 +45,9 @@
             android:id="@+id/textView_amount"
             android:layout_width="match_parent"
             android:layout_height="48dp"
-            android:layout_alignParentRight="true"
-            android:gravity="center_vertical"
+            android:layout_gravity="end"
+            android:layout_marginRight="40dp"
+            android:gravity="center_vertical|end"
             android:padding="8dp"
             android:textColor="@android:color/black"
             android:textSize="14sp" />
@@ -56,32 +57,108 @@
     <com.github.aakira.expandablelayout.ExpandableLinearLayout
         android:id="@+id/expandableLayout"
         android:layout_width="match_parent"
-        android:layout_height="150dp"
+        android:layout_height="wrap_content"
         android:layout_below="@id/textViewLayout"
         android:orientation="vertical"
         app:ael_duration="400"
         app:ael_expanded="false">
 
 
-        <TextView
-            android:id="@+id/people_list_textview"
+        <LinearLayout
+            android:id="@+id/layoutitem1"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_centerInParent="true"
-            android:gravity="center"
-            android:maxLines="5"
-            android:padding="20dp"
-            android:scrollbars="vertical"
-            android:textColor="@android:color/white"
-            android:textSize="16sp" />
+            android:layout_marginTop="10dp"
+            android:orientation="horizontal"
+            android:paddingLeft="10dp"
+            android:paddingRight="10dp">
 
-        <android.support.v7.widget.AppCompatButton
-            android:layout_width="wrap_content"
-            android:layout_gravity="right|bottom"
+            <ImageView
+                android:id="@+id/people_item1_list_icon"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:src="@drawable/ic_radio_button_checked_black_24dp" />
+
+            <TextView
+                android:id="@+id/people_item1_name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:gravity="center_vertical"
+                android:textColor="@android:color/white"
+                android:textSize="16sp" />
+
+            <TextView
+                android:id="@+id/people_item1_amount"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="10dp"
+                android:layout_gravity="center_vertical"
+                android:gravity="center_vertical|end"
+                android:textColor="@android:color/white"
+                android:textSize="16sp" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/layoutitem2"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:id="@+id/addnewspent_indiv_People"
-            android:text="@string/addNewSpent"
-            />
+            android:layout_marginTop="3dp"
+            android:orientation="horizontal"
+            android:paddingLeft="10dp"
+            android:paddingRight="10dp">
+
+            <ImageView
+                android:id="@+id/people_item2_list_icon"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:src="@drawable/ic_radio_button_checked_black_24dp" />
+
+            <TextView
+                android:id="@+id/people_item2_name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:layout_marginLeft="10dp"
+                android:textColor="@android:color/white"
+                android:textSize="16sp" />
+
+            <TextView
+                android:id="@+id/people_item2_amount"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="10dp"
+                android:gravity="center_vertical|end"
+                android:textColor="@android:color/white"
+                android:textSize="16sp" />
+
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="bottom|center"
+            android:orientation="horizontal">
+
+            <android.support.v7.widget.AppCompatButton
+                android:id="@+id/addnewspent_showmore_people"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="bottom"
+                android:text="@string/showmore" />
+
+            <android.support.v7.widget.AppCompatButton
+                android:id="@+id/addnewspent_indiv_People"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="bottom"
+                android:text="@string/addNewSpent" />
+
+
+        </LinearLayout>
 
     </com.github.aakira.expandablelayout.ExpandableLinearLayout>
 </RelativeLayout>

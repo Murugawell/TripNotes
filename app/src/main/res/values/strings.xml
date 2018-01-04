@@ -47,4 +47,5 @@
     <string name="createdTimeDetails">CREATED DATE &amp; TIME</string>
     <string name="tripFromTo">ADDRESS</string>
     <string name="addNewSpent">Add New Spent</string>
+    <string name="showmore">Show More</string>
 </resources>

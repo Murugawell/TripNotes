@@ -66,8 +66,8 @@
                     android:layout_below="@+id/title_estimateamount"
                     android:layout_marginTop="20dp"
                     android:textColor="@color/yellow1"
-                    android:textStyle="bold|italic"
-                    android:textSize="14sp" />
+                    android:textSize="14sp"
+                    android:textStyle="bold|italic" />
 
 
                 <TextView
@@ -177,7 +177,7 @@
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_weight="1"
+                        android:layout_weight="2"
                         android:gravity="center"
                         android:orientation="vertical">
 
@@ -206,7 +206,7 @@
                         android:layout_weight="1"
                         android:gravity="center"
                         android:orientation="vertical"
-                        android:visibility="invisible">
+                        android:visibility="gone">
 
                         <TextView
                             android:id="@+id/content_estimated_amount"
