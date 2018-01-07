@@ -8,7 +8,7 @@
     <string name="toDoList_mock" translatable="false">5/10</string>
     <string name="toDoList_displaylabel" translatable="false">LIST</string>
     <string name="amount_mock" translatable="false">$150</string>
-    <string name="amount_displaylabel" translatable="false">AMOUNT</string>
+    <string name="amount_displaylabel" translatable="false">AMOUNT SPENT</string>
     <string name="creator_badge" translatable="false">CREATOR</string>
     <string name="creator_name_mock" translatable="false">You</string>
     <string name="rating_mock" translatable="false">(26)</string>
@@ -48,4 +48,13 @@
     <string name="tripFromTo">ADDRESS</string>
     <string name="addNewSpent">Add New Spent</string>
     <string name="showmore">Show More</string>
+    <string name="people_estimatedamount_display_label">MAXIMUM AMOUNT</string>
+    <string name="people_maximum_amount_display_label">MAXIMUM AMOUNT</string>
+    <string name="people_spent_amount_display_label">AMOUNT SPENT</string>
+    <string name="people_balance_amount_display_label">BALANCE AMOUNT</string>
+    <string name="editSpent">EDIT SPENT</string>
+    <string name="action_refresh">Refresh</string>
+    <string name="spent_amount_details">Spent Amount Details</string>
+    <string name="amount_for_item">Item</string>
+    <string name="amount_spent_value">Amount Spent</string>
 </resources>

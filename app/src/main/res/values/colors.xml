@@ -25,6 +25,8 @@
     <color name="background1">#d32b9b70</color>
     <color name="yellow1">#f5f293</color>
     <color name="green1">#40e51f</color>
-
-
+    <color name="black">#000000</color>
+    <color name="colorRipple">#FF00FF</color>
+    <color name="transparent">#00000000</color>
+    <color name="white_light">#BFFFFFFF</color>
 </resources>

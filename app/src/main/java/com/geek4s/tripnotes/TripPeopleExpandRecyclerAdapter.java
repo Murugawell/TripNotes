@@ -2,11 +2,11 @@ package com.geek4s.tripnotes;
 
 import android.animation.ObjectAnimator;
 import android.content.Context;
+import android.content.Intent;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
 import android.util.SparseBooleanArray;
 import android.view.LayoutInflater;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
@@ -29,16 +29,20 @@ import org.json.JSONException;
 import java.util.List;
 
 
-public class RecyclerViewRecyclerAdapter extends RecyclerView.Adapter<RecyclerViewRecyclerAdapter.ViewHolder> {
+public class TripPeopleExpandRecyclerAdapter extends RecyclerView.Adapter<TripPeopleExpandRecyclerAdapter.ViewHolder> {
 
     private final List<People> data;
+    FoldingCellListAdapter.ViewHolder viewHolder;
     private Context context;
-    private SparseBooleanArray expandState = new SparseBooleanArray();
+    private static SparseBooleanArray expandState = new SparseBooleanArray();
+    ;
     Trip trip;
 
-    public RecyclerViewRecyclerAdapter(final List<People> data, Trip trip) {
+
+    public TripPeopleExpandRecyclerAdapter(final List<People> data, Trip trip, FoldingCellListAdapter.ViewHolder viewHolder) {
         this.data = data;
         this.trip = trip;
+        this.viewHolder = viewHolder;
         for (int i = 0; i < data.size(); i++) {
             expandState.append(i, false);
         }
@@ -70,10 +74,38 @@ public class RecyclerViewRecyclerAdapter extends RecyclerView.Adapter<RecyclerVi
             }
         });
 
+
+        holder.maximumamount.setText(item.getMaxAmount() + "");
+        holder.spentamount.setText(item.getTotalAmountSpent() + "");
+
+        float balance = item.getTotalAmountSpent() - item.getMaxAmount();
+
+
+        if (balance < 0) {
+            holder.balanceamount.setCompoundDrawablesWithIntrinsicBounds(R.drawable.minus_amount, 0, 0, 0);
+            holder.balanceamount.setTextColor(0xFFFC092E);
+
+            holder.amountinfo.setText("You have to pay");
+
+        } else if (balance > 0) {
+            holder.balanceamount.setCompoundDrawablesWithIntrinsicBounds(R.drawable.plus_amount, 0, 0, 0);
+            holder.balanceamount.setTextColor(0xFF09FC03);
+
+            holder.amountinfo.setText("You will get");
+
+        } else {
+            holder.balanceamount.setCompoundDrawablesWithIntrinsicBounds(R.drawable.equal_amount, 0, 0, 0);
+
+            holder.amountinfo.setText("Nothing to pay and get");
+
+        }
+        holder.balanceamount.setText(balance + "");
+
+
         holder.textviewamount.setText(item.getTotalAmountSpent() + "");
-        holder.itemView.setBackgroundColor(ContextCompat.getColor(context, R.color.colorAccent));
+        holder.itemView.setBackgroundColor(ContextCompat.getColor(context, R.color.white));
         holder.expandableLayout.setInRecyclerView(true);
-        holder.expandableLayout.setBackgroundColor(ContextCompat.getColor(context, R.color.background1));
+        holder.expandableLayout.setBackgroundColor(ContextCompat.getColor(context, R.color.cardview_dark_background));
         holder.expandableLayout.setInterpolator(Utils.createInterpolator(Utils.LINEAR_OUT_SLOW_IN_INTERPOLATOR));
         holder.expandableLayout.setExpanded(expandState.get(position));
         JSONArray amt = item.getAmountSpentJSON();
@@ -102,6 +134,17 @@ public class RecyclerViewRecyclerAdapter extends RecyclerView.Adapter<RecyclerVi
                 }
             }
         }
+
+
+        holder.showmore.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                ShowMorePeopleViewActivity.trip = trip;
+                ShowMorePeopleViewActivity.people = item;
+                Intent in = new Intent(context, ShowMorePeopleViewActivity.class);
+                context.startActivity(in);
+            }
+        });
 
 
         holder.addNewSpent.setOnClickListener(new View.OnClickListener() {
@@ -148,14 +191,25 @@ public class RecyclerViewRecyclerAdapter extends RecyclerView.Adapter<RecyclerVi
 
     private void onClickButton(final ExpandableLayout expandableLayout) {
         expandableLayout.toggle();
+        if (!expandableLayout.isExpanded()) {
+            viewHolder.b_close.setVisibility(View.GONE);
+        } else {
+            viewHolder.b_close.setVisibility(View.VISIBLE);
+        }
+
     }
 
     @Override
     public int getItemCount() {
+        if (data.size() > 3)
+            return 3;
         return data.size();
     }
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
+        private final TextView maximumamount, spentamount;
+        private final TextView balanceamount;
+        private final TextView amountinfo;
         public Button showmore;
         public TextView textView, listofPeolpleTextView, textviewamount;
         public LinearLayout layitem1, layitem2;
@@ -173,6 +227,11 @@ public class RecyclerViewRecyclerAdapter extends RecyclerView.Adapter<RecyclerVi
         public ViewHolder(View v) {
             super(v);
             textView = (TextView) v.findViewById(R.id.textView);
+            maximumamount = (TextView) v.findViewById(R.id.people_maximum_amount_value);
+            spentamount = (TextView) v.findViewById(R.id.people_spent_amount_value);
+            balanceamount = (TextView) v.findViewById(R.id.people_balance_amount_value);
+            amountinfo = (TextView) v.findViewById(R.id.info_amount);
+
             item1name = (TextView) v.findViewById(R.id.people_item1_name);
             item1amount = (TextView) v.findViewById(R.id.people_item1_amount);
             item1icon = (ImageView) v.findViewById(R.id.people_item1_list_icon);
@@ -199,6 +258,9 @@ public class RecyclerViewRecyclerAdapter extends RecyclerView.Adapter<RecyclerVi
 
     }
 
+    public String roundOfFloat(String str, int len) {
+        return String.format("%." + len + "f", str);
+    }
 
     public ObjectAnimator createRotateAnimator(final View target, final float from, final float to) {
         ObjectAnimator animator = ObjectAnimator.ofFloat(target, "rotation", from, to);

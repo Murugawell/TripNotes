@@ -52,19 +52,19 @@ public class AddNewTrip {
         add.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                String triptitle, tripestimateamount, from, to;
-                triptitle = editText_tripName.getText().toString();
+                String tripName, tripestimateamount, from, to;
+                tripName = editText_tripName.getText().toString();
                 tripestimateamount = editText_tripEstimateAmount.getText().toString();
                 from = editText_tripFrom.getText().toString().trim();
                 to = editText_tripTo.getText().toString().trim();
-                if (triptitle.trim().length() <= 0) {
+                if (tripName.trim().length() <= 0) {
                     Snackbar.make(view, "Please enter trip name to create new trip", Snackbar.LENGTH_SHORT).show();
                     editText_tripName.requestFocus();
                 } else if (tripestimateamount.trim().length() <= 0) {
                     Snackbar.make(view, "Please enter estimate amount for this trip", Snackbar.LENGTH_SHORT).show();
                     editText_tripEstimateAmount.requestFocus();
                 } else {
-                    String output = createTrip(triptitle, tripestimateamount, from, to);
+                    String output = createTrip(tripName, tripestimateamount, from, to);
                     Toast.makeText(context, output, Toast.LENGTH_LONG).show();
                     MainActivity.getTripListFromDB(context);
                     MainActivity.showListOfTrips(context);

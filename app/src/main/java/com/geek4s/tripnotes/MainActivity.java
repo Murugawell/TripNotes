@@ -37,8 +37,6 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        getWindow().requestFeature(Window.FEATURE_CONTENT_TRANSITIONS);
-
         try {
             setContentView(R.layout.activity_main);
         } catch (Exception e) {
@@ -49,7 +47,6 @@ public class MainActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-
         final Context con = this;
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -58,38 +55,14 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-
         // get our list view
         theListView = (ListView) findViewById(R.id.mainListView);
 
-        // prepare elements to display
-
+        // get list of trips from database
         getTripListFromDB(this);
-/*
 
-        // add custom btn handler to first list item
-        items.get(0).setRequestBtnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Toast.makeText(getApplicationContext(), "CUSTOM HANDLER FOR FIRST BUTTON", Toast.LENGTH_SHORT).show();
-            }
-        });
-*/
+        // show all the trips
         showListOfTrips(this);
-/*
-        // set on click event listener to list view
-        theListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> adapterView, View view, int pos, long l) {
-                // toggle clicked cell state
-                ((FoldingCell) view).toggle(false);
-                // register in adapter that state for selected cell is toggled
-//                adapter.registerToggle(pos);
-            }
-        });
-*/
-
-
     }
 
     public static void getTripListFromDB(Context context) {
@@ -97,8 +70,9 @@ public class MainActivity extends AppCompatActivity {
         try {
             da.open();
             allTrips = da.getAllTrips();
+            da.close();
             Collections.reverse(allTrips);
-            Toast.makeText(context, allTrips.size() + "", Toast.LENGTH_LONG).show();
+//            Toast.makeText(context, allTrips.size() + "", Toast.LENGTH_LONG).show();
         } catch (Exception e) {
             Toast.makeText(context, e.toString(), Toast.LENGTH_LONG).show();
         }
@@ -136,6 +110,11 @@ public class MainActivity extends AppCompatActivity {
 
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
+            return true;
+        } else if (id == R.id.action_refresh) {
+            Toast.makeText(getApplicationContext(), "Trips reloaded", Toast.LENGTH_SHORT).show();
+            getTripListFromDB(this);
+            showListOfTrips(this);
             return true;
         }
 

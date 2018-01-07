@@ -66,5 +66,20 @@
         <item name="android:textStyle">bold</item>
     </style>
 
+    <style name="DialogTheme">
+        <item name="android:windowEnterAnimation">@anim/slide_left</item>
+        <item name="android:windowExitAnimation">@anim/slide_right</item>
+    </style>
+
+    <style name="DialogTheme1">
+        <item name="android:windowEnterAnimation">@anim/slide_up</item>
+        <item name="android:windowExitAnimation">@anim/slide_down</item>
+    </style>
+
+    <style name="DialogTheme2">
+        <item name="android:windowEnterAnimation">@anim/slide_left_reverse</item>
+        <item name="android:windowExitAnimation">@anim/slide_right_reverse</item>
+    </style>
+
 
 </resources>

@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:visibility="gone">
+
+    <!-- content header line -->
+    <include layout="@layout/cell_content_layout_header" />
+
+    <!-- content header image -->
+    <include layout="@layout/cell_content_layout_header_below_image" />
+
+    <!-- content body layout -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/black_overlay"
+        android:orientation="vertical"
+        android:paddingBottom="6dp"
+        android:paddingLeft="5dp"
+        android:paddingRight="5dp"
+        android:paddingTop="9dp">
+
+        <!-- avatar and name part -->
+        <include layout="@layout/cell_content_body_creator"></include>
+
+        <!-- divider line -->
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_marginBottom="6dp"
+            android:layout_marginTop="9dp"
+            android:src="@color/contentDividerLine"
+            android:visibility="gone" />
+
+        <!--people list -->
+        <include layout="@layout/cell_content_people_list"></include>
+
+        <!-- created dates part -->
+        <include layout="@layout/cell_content_created_date_time"></include>
+
+
+        <!-- from to address-->
+        <include layout="@layout/cell_content_address_from_to"></include>
+
+        <!-- end layout -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="70dp">
+
+        </LinearLayout>
+    </LinearLayout>
+
+</LinearLayout>
