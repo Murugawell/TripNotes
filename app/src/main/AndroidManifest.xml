@@ -19,6 +19,7 @@
             </intent-filter>
         </activity>
         <activity android:name=".ShowMorePeopleViewActivity"></activity>
+        <activity android:name=".help.HelpActivity"></activity>
     </application>
 
 </manifest>

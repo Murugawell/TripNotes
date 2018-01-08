@@ -57,4 +57,5 @@
     <string name="spent_amount_details">Spent Amount Details</string>
     <string name="amount_for_item">Item</string>
     <string name="amount_spent_value">Amount Spent</string>
+    <string name="action_help">Help</string>
 </resources>

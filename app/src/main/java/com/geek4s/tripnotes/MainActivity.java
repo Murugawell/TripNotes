@@ -22,6 +22,7 @@ import android.widget.ListView;
 import android.widget.Toast;
 
 import com.geek4s.tripnotes.bean.Trip;
+import com.geek4s.tripnotes.help.HelpActivity;
 import com.ramotion.foldingcell.FoldingCell;
 
 import java.util.ArrayList;
@@ -115,6 +116,9 @@ public class MainActivity extends AppCompatActivity {
             Toast.makeText(getApplicationContext(), "Trips reloaded", Toast.LENGTH_SHORT).show();
             getTripListFromDB(this);
             showListOfTrips(this);
+            return true;
+        } else if (id == R.id.action_help) {
+           startActivity(new Intent(MainActivity.this, HelpActivity.class));
             return true;
         }
 
