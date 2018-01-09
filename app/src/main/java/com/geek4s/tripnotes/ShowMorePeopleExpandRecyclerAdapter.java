@@ -9,6 +9,7 @@ import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.Html;
+import android.util.Log;
 import android.util.SparseBooleanArray;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -26,6 +27,9 @@ import com.github.aakira.expandablelayout.ExpandableLayoutListenerAdapter;
 import com.github.aakira.expandablelayout.ExpandableLinearLayout;
 import com.github.aakira.expandablelayout.Utils;
 
+import org.json.JSONArray;
+
+import java.util.ArrayList;
 import java.util.List;
 
 
@@ -156,14 +160,22 @@ public class ShowMorePeopleExpandRecyclerAdapter extends RecyclerView.Adapter<Sh
             holder.textviewInfoSpentAmountList.setVisibility(View.VISIBLE);
             holder.textviewInfoSpentAmountList.setBackgroundColor(context.getResources().getColor(R.color.btnRequest));
         }
+
+
         String text = "Spent Amount Details(" + "<b><font color=#FFFFFF>" + spentItemLength + "</font></b>" + ")";
         holder.spentamountdetailstitle.setText(Html.fromHtml(text));
 
 
         holder.addNewSpent.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View view) {
+            public void onClick(final View view) {
                 new AddNewSpentAmount(context, trip, item).addNewSpentDialog();
+                AddNewSpentAmount.alert.setOnDismissListener(new DialogInterface.OnDismissListener() {
+                    @Override
+                    public void onDismiss(DialogInterface dialogInterface) {
+                        ShowMorePeopleViewActivity.refresh(trip,item, context);
+                    }
+                });
             }
         });
         holder.expandableLayout.setListener(new ExpandableLayoutListenerAdapter() {
@@ -187,6 +199,34 @@ public class ShowMorePeopleExpandRecyclerAdapter extends RecyclerView.Adapter<Sh
                 onClickButton(holder.expandableLayout);
             }
         });
+    }
+
+    private List getLatestData(People item) {
+        List l = new ArrayList();
+        Datas datas = new Datas(context);
+        datas.open();
+        Trip t = datas.getTrip(trip.getName());
+        if (t != null) {
+            l.add(t);
+        }
+        JSONArray p = t.getPeoplesJSON();
+        final People people = convertJSONARRAYtoLIST(t.getPeoples(), item);
+        if (people != null) {
+            l.add(people);
+        }
+        Log.i("dfdsf", l.size() + "");
+        return l;
+    }
+
+    private People convertJSONARRAYtoLIST(People[] peoplesJSON, People item) {
+
+        for (int i = 0; i < peoplesJSON.length; i++) {
+
+            if (peoplesJSON[i].getName().toString().equalsIgnoreCase(item.getName().toString())) {
+                return peoplesJSON[i];
+            }
+        }
+        return null;
     }
 
     private void deletePeople(People item) {
@@ -293,3 +333,31 @@ public class ShowMorePeopleExpandRecyclerAdapter extends RecyclerView.Adapter<Sh
         return animator;
     }
 }
+
+
+
+
+
+
+
+
+/*
+*
+*   List list = getLatestData(item);
+                        People p = (People) list.get(1);
+                        Trip trip = (Trip) list.get(0);
+                        int spentItemLength = p.getAmountSpentJSON().length();
+                        if (spentItemLength == 0) {
+                            holder.headersForSpentAmountLayout.setVisibility(View.GONE);
+                            String text = "No spent amount details available. Click <b><i> Add New Spent</i></b> to create new spent";
+                            holder.textviewInfoSpentAmountList.setText(Html.fromHtml(text));
+                            holder.textviewInfoSpentAmountList.setVisibility(View.VISIBLE);
+                            holder.textviewInfoSpentAmountList.setBackgroundColor(context.getResources().getColor(R.color.btnRequest));
+                        }
+
+
+                        String text = "Spent Amount Details(" + "<b><font color=#FFFFFF>" + spentItemLength + "</font></b>" + ")";
+                        holder.spentamountdetailstitle.setText(Html.fromHtml(text));
+
+                        holder.foramountrecycleview.setAdapter(new SpentAmountForRecyclerAdapter(p.getAmountSpentJSON(), trip, p));
+* */

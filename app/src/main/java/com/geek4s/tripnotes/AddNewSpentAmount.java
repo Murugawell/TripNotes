@@ -26,6 +26,7 @@ public class AddNewSpentAmount {
     Context context;
     Trip trip;
     People people;
+    public static AlertDialog alert;
 
     AddNewSpentAmount(Context con, Trip trip, People people) {
         context = con;
@@ -39,7 +40,7 @@ public class AddNewSpentAmount {
         final AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(context);
         alertDialogBuilder.setView(promptsView);
         alertDialogBuilder.setCancelable(false);
-        final AlertDialog alert = alertDialogBuilder.create();
+        alert = alertDialogBuilder.create();
         /*Window window = alert.getWindow();
         alert.getWindow().getAttributes().windowAnimations = R.style.DialogTheme2; //style id
         WindowManager.LayoutParams wlp = window.getAttributes();*/

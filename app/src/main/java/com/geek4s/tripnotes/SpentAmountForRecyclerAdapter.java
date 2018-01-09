@@ -72,7 +72,7 @@ public class SpentAmountForRecyclerAdapter extends RecyclerView.Adapter<SpentAmo
                                 deleteSpentAmount(item);
 
                             } else if (ShowOptionsDialogs.selectedOption.equalsIgnoreCase("swap")) {
-                                swapSpentAMoount(item);
+                                swapSpentAmount(item);
 
                             }
                         }
@@ -89,7 +89,7 @@ public class SpentAmountForRecyclerAdapter extends RecyclerView.Adapter<SpentAmo
         }
     }
 
-    private void swapSpentAMoount(JSONObject item) {
+    private void swapSpentAmount(JSONObject item) {
         SwapSpentAmount swapSpentAmount = new SwapSpentAmount();
         List peopleList = getAllPeoplesName(trip);
         swapSpentAmount.swapSpentAMountDialog(context, trip, people, item, peopleList);

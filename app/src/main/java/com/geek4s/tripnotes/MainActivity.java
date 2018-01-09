@@ -22,6 +22,7 @@ import android.widget.ListView;
 import android.widget.Toast;
 
 import com.geek4s.tripnotes.bean.Trip;
+import com.geek4s.tripnotes.graph.BarChartActivity;
 import com.geek4s.tripnotes.help.HelpActivity;
 import com.ramotion.foldingcell.FoldingCell;
 
@@ -111,6 +112,10 @@ public class MainActivity extends AppCompatActivity {
 
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
+
+//            startActivity(new Intent(MainActivity.this, BarChartActivity.class));
+//            overridePendingTransition(R.anim.move_right_in_activity, R.anim.move_left_out_activity);
+
             return true;
         } else if (id == R.id.action_refresh) {
             Toast.makeText(getApplicationContext(), "Trips reloaded", Toast.LENGTH_SHORT).show();
@@ -118,7 +123,9 @@ public class MainActivity extends AppCompatActivity {
             showListOfTrips(this);
             return true;
         } else if (id == R.id.action_help) {
-           startActivity(new Intent(MainActivity.this, HelpActivity.class));
+            startActivity(new Intent(MainActivity.this, HelpActivity.class));
+            overridePendingTransition(R.anim.move_right_in_activity, R.anim.move_left_out_activity);
+
             return true;
         }
 

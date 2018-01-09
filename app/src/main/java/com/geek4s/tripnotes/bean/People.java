@@ -27,6 +27,10 @@ public class People {
         this.amountSpent = amountSpent;
     }
 
+    public People() {
+
+    }
+
     public String getName() {
         return name;
     }

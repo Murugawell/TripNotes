@@ -253,6 +253,7 @@ public class FoldingCellListAdapter extends ArrayAdapter<Trip> {
                     Log.i("add", temptrip.toString());
                     Intent in = new Intent(getContext(), ShowMorePeopleViewActivity.class);
                     getContext().startActivity(in);
+
                 }
             });
 

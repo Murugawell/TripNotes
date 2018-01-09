@@ -2,6 +2,7 @@ package com.geek4s.tripnotes;
 
 import android.animation.ObjectAnimator;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
@@ -151,6 +152,12 @@ public class TripPeopleExpandRecyclerAdapter extends RecyclerView.Adapter<TripPe
             @Override
             public void onClick(View view) {
                 new AddNewSpentAmount(context, trip, item).addNewSpentDialog();
+                AddNewSpentAmount.alert.setOnDismissListener(new DialogInterface.OnDismissListener() {
+                    @Override
+                    public void onDismiss(DialogInterface dialogInterface) {
+
+                    }
+                });
             }
         });
         holder.expandableLayout.setListener(new ExpandableLayoutListenerAdapter() {
