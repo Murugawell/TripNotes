@@ -24,6 +24,7 @@ import android.widget.Toast;
 import com.geek4s.tripnotes.bean.Trip;
 import com.geek4s.tripnotes.graph.BarChartActivity;
 import com.geek4s.tripnotes.help.HelpActivity;
+import com.geek4s.tripnotes.help.OtherApps;
 import com.ramotion.foldingcell.FoldingCell;
 
 import java.util.ArrayList;
@@ -44,9 +45,9 @@ public class MainActivity extends AppCompatActivity {
         } catch (Exception e) {
             e.printStackTrace();
         }
-
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
+//
+//        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+//        setSupportActionBar(toolbar);
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         final Context con = this;
@@ -113,7 +114,7 @@ public class MainActivity extends AppCompatActivity {
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
 
-//            startActivity(new Intent(MainActivity.this, BarChartActivity.class));
+//            startActivity(new Intent(MainActivity.this, OtherApps.class));
 //            overridePendingTransition(R.anim.move_right_in_activity, R.anim.move_left_out_activity);
 
             return true;

@@ -1,13 +1,12 @@
 package com.geek4s.tripnotes.help;
 
 import android.graphics.Color;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.widget.Adapter;
-import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import com.geek4s.tripnotes.DividerItemDecoration;
@@ -17,8 +16,13 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.BufferedInputStream;
+import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -31,6 +35,10 @@ import me.ithebk.barchart.BarChartModel;
  */
 
 public class HelpActivity extends AppCompatActivity {
+    private List faqlist;
+    public String helpJsonUrl = "https://raw.githubusercontent.com/Murugawell/RawImages/master/tripnotes_helpjson.json";
+    public RecyclerView recyclerView;
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -42,13 +50,17 @@ public class HelpActivity extends AppCompatActivity {
             e.printStackTrace();
         }
 
-        RecyclerView recyclerView;
+
         recyclerView = (RecyclerView) findViewById(R.id.help_recyclerview);
         recyclerView.addItemDecoration(new DividerItemDecoration(this));
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
-        List list = getData();
-        recyclerView.setAdapter(new HelpRecyclerviewAdapter(list));
+        faqlist = getData();
 
+        try {
+            new GetHelpJson().execute();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
 
     }
 
@@ -101,6 +113,125 @@ public class HelpActivity extends AppCompatActivity {
         super.onBackPressed();
         overridePendingTransition(R.anim.move_left_in_activity, R.anim.move_right_out_activity);
 
+    }
+
+
+    private class GetHelpJson extends AsyncTask<Void, Void, Void> {
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+            // Showing progress dialog
+
+        }
+
+        @Override
+        protected Void doInBackground(Void... arg0) {
+
+            // Making a request to url and getting response
+            String jsonStr = null;
+
+            try {
+                String response = null;
+                URL url = new URL(helpJsonUrl);
+                HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+                connection.setRequestMethod("GET");
+                InputStream in = new BufferedInputStream(connection.getInputStream());
+
+                BufferedReader reader = new BufferedReader(new InputStreamReader(in));
+                StringBuilder sb = new StringBuilder();
+
+                String line;
+                try {
+                    while ((line = reader.readLine()) != null) {
+                        sb.append(line).append('\n');
+                    }
+                } catch (IOException e) {
+                    e.printStackTrace();
+                } finally {
+                    try {
+                        in.close();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                }
+                jsonStr = sb.toString();
+
+            } catch (Exception e) {
+
+            }
+
+//            Log.e(TAG, "Response from url: " + jsonStr);
+
+            if (jsonStr != null) {
+                try {
+                    JSONObject jsonObj = new JSONObject(jsonStr);
+
+                    // Getting JSON Array node
+                    JSONArray faq = jsonObj.getJSONArray("faq");
+
+                    if (faq.length() > 0) {
+                        faqlist.removeAll(faqlist);
+                    }
+                    // looping through All Contacts
+                    for (int i = 0; i < faq.length(); i++) {
+                        JSONObject c = faq.getJSONObject(i);
+
+
+                        String question = c.getString("question");
+                        String answer = c.getString("answer");
+
+//                        // tmp hash map for single contact
+                        HashMap<String, String> qa = new HashMap<>();
+
+                        // adding each child node to HashMap key => value
+                        qa.put("question", question);
+                        qa.put("answer", answer);
+
+//                        // adding contact to contact list
+
+
+                        faqlist.add(qa);
+                    }
+                } catch (final JSONException e) {
+//                    Log.e(TAG, "Json parsing error: " + e.getMessage());
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            Toast.makeText(getApplicationContext(),
+                                    "Json parsing error: " + e.getMessage(),
+                                    Toast.LENGTH_LONG)
+                                    .show();
+                        }
+                    });
+
+                }
+            } else {
+//                Log.e(TAG, "Couldn't get json from server.");
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        Toast.makeText(getApplicationContext(), "Enable your internet connection to get latest updates", Toast.LENGTH_SHORT).show();
+                        setAdaterData();
+                    }
+                });
+
+            }
+
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Void result) {
+            super.onPostExecute(result);
+            // Dismiss the progress dialog
+            setAdaterData();
+        }
+
+    }
+
+    public void setAdaterData() {
+        recyclerView.setAdapter(new HelpRecyclerviewAdapter(faqlist));
     }
 }
 

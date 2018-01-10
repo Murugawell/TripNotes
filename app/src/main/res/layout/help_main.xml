@@ -13,24 +13,4 @@
 
     </android.support.v7.widget.RecyclerView>
 
-    <HorizontalScrollView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/help_recyclerview">
-
-        <me.ithebk.barchart.BarChart
-            android:id="@+id/bar_chart_vertical"
-            android:layout_width="wrap_content"
-            android:layout_height="300dp"
-            barchart:bar_color="@color/colorPrimary"
-            barchart:bar_max_value="100"
-            barchart:bar_show_animation="true"
-            barchart:bar_show_auto_color="false"
-            barchart:bar_show_value="true"
-            barchart:bar_spaces="10dp"
-            barchart:bar_text_color="#808080"
-            barchart:bar_text_size="10sp"
-            barchart:bar_type="vertical"
-            barchart:bar_width="40dp" />
-    </HorizontalScrollView>
 </RelativeLayout>

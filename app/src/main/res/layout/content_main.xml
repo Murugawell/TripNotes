@@ -30,23 +30,4 @@
         android:scrollbars="none" />
 
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:visibility="gone">
-
-        <Button
-            android:id="@+id/toggle_instant_btn"
-            android:layout_width="match_parent"
-            android:layout_height="50dp"
-            android:text="Toggle instantly" />
-
-        <Button
-            android:id="@+id/toggle_btn"
-            android:layout_width="match_parent"
-            android:layout_height="50dp"
-            android:text="Toggle with animation" />
-    </LinearLayout>
-
 </RelativeLayout>

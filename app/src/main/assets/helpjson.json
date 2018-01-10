@@ -1,16 +1,40 @@
 {
   "faq": [
     {
-      "question": "1",
-      "answer": "2"
+      "question": "How to add/create new trip?",
+      "answer": "Click on the <b>+</b> (add button) at the bottom of the trip notes page. <br><font color=#00FF00> Please enter the following details to create new trip.</font><br>\t\t<b><font color=#00FF00>•</font></b>Enter the name of trip.<br>\t\t<b><font color=#00FF00>•</font></b>Enter the estimated amount for the trip.<br>\t\t<b><font color=#00FF00>•</font></b>Enter the source (from) and destination (to) address.<br>\t\t<b><font color=#00FF00>•</font></b>Click the add button."
     },
     {
-      "question": "1",
-      "answer": "2"
+      "question": "How to add new people?",
+      "answer": "<b><font color=#00FF00>•</font></b>If you are in the People list page of the particular trip, Click the <b>add people icon button</b> at the bottom<br><b><font color=#00FF00>•</font></b>If you are in trip list page, Click the <b>add people button</b> in the people section (This will be visible only if the trip unfolded)<br><br><font color=#00FF00> Please enter the following details to add new people.</font><br>\t\t<b><font color=#00FF00>•</font></b>Enter the name of the people.<br>\t\t<b><font color=#00FF00>•</font></b>Choose the type of sharing.<br>\t\t\t\tIf you choose type of sharing as <b> share equally </b>, the amount of the trip will be shared equally amoung all the people who are all belongs to <b>share equally type</b><br>\t\t\t\tIf you choose type of sharing as <b> assign manually </b>, you have to enter the amount. You have to pay the entered amount at the end of trip.(<font color=#ffbf12><b>Note</b>:whatever the amount spent, you need not worry about that. You need to pay the assigned amount to you.</font>)<br>\t\t<b><font color= #00FF00>•</font></b>Enter the add button.<br>"
     },
     {
-      "question": "1",
-      "answer": "2"
+      "question": "How to add new spent?",
+      "answer": "Click the <b>add new spent button</b> in the spent amount details section which is available in all the people list <br> <font color = #00FF00> Please enter the following details to add new spent.</font><br>\t\t<b><font color=#00FF00>•</font></b>Enter the name of the item you spent.<br>\t\t<b><font color=#00FF00>•</font></b>Enter the amount you spent for that item.<br>\t\t<b><font color= #00FF00>•</font></b>Enter the add button.<br>"
+    },
+    {
+      "question": "How to remove/delete trip?",
+      "answer": "Long click on <b>the trip title</b>. The popup dialog will be shown. Click the <b> remove button</b> to remove/delete trip"
+    },
+    {
+      "question": "How to remove/delete people from the trip?",
+      "answer": "Long click on <b>the people list</b>. The popup dialog will be shown. Click the <b> remove button</b> to remove/delete people from trip"
+    },
+    {
+      "question": "How to remove/delete spent?",
+      "answer": "Long click on <b>the spent list</b>. The popup dialog will be shown. Click the <b> remove button</b> to remove/delete spent"
+    },
+    {
+      "question": "How to edit trip?",
+      "answer": "Click on <b>the edit icon button at the top right of the trip list</b>. The popup dialog will be shown. <br> Make your changes and click the <b> update button</b> to update trip."
+    },
+    {
+      "question": "How to edit people in the trip?",
+      "answer": "Long click on <b>the people list</b>. The popup dialog will be shown. Click the <b> edit button</b>. <br> Make your changes and click the <b>update button</b> to update people."
+    },
+    {
+      "question": "How to edit spent?",
+      "answer": "Long click on <b>the spent list</b>. The popup dialog will be shown. Click the <b> edit button</b>.<br> Make your changes and click the <b>update button</b> to update spent details."
     }
   ]
 }

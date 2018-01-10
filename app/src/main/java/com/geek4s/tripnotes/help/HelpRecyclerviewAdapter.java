@@ -2,8 +2,10 @@ package com.geek4s.tripnotes.help;
 
 import android.animation.ObjectAnimator;
 import android.content.Context;
+import android.graphics.Color;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
+import android.text.Html;
 import android.util.SparseBooleanArray;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -18,6 +20,9 @@ import com.github.aakira.expandablelayout.ExpandableLayoutListenerAdapter;
 import com.github.aakira.expandablelayout.ExpandableLinearLayout;
 import com.github.aakira.expandablelayout.Utils;
 
+import org.json.JSONObject;
+
+import java.util.HashMap;
 import java.util.List;
 
 /**
@@ -49,10 +54,10 @@ public class HelpRecyclerviewAdapter extends RecyclerView.Adapter<HelpRecyclervi
 
     @Override
     public void onBindViewHolder(final HelpRecyclerviewAdapter.ViewHolder holder, final int position) {
-
+        HashMap<String, String> obj = (HashMap<String, String>) list.get(position);
 
         holder.expandableLayout.setInRecyclerView(true);
-        holder.expandableLayout.setBackgroundColor(ContextCompat.getColor(context, R.color.cardview_dark_background));
+        holder.expandableLayout.setBackgroundColor(ContextCompat.getColor(context, R.color.black));
         holder.expandableLayout.setInterpolator(Utils.createInterpolator(Utils.LINEAR_OUT_SLOW_IN_INTERPOLATOR));
         holder.expandableLayout.setExpanded(expandState.get(position));
 
@@ -77,6 +82,11 @@ public class HelpRecyclerviewAdapter extends RecyclerView.Adapter<HelpRecyclervi
                 onClickButton(holder.expandableLayout);
             }
         });
+        holder.question.setText(Html.fromHtml(obj.get("question")));
+        holder.answer.setText(Html.fromHtml(obj.get("answer")));
+        holder.answer.setTextColor(Color.WHITE);
+        holder.answer.setTextSize(16f);
+        holder.answer.setPadding(20, 20, 20, 20);
 
     }
 

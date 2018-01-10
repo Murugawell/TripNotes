@@ -8,13 +8,11 @@
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity
-            android:name=".MainActivity"
-            android:label="@string/app_name"
-            android:theme="@style/AppTheme.NoActionBar"></activity>
+        <activity android:name=".MainActivity"></activity>
         <activity android:name=".ShowMorePeopleViewActivity"></activity>
         <activity android:name=".help.HelpActivity"></activity>
         <activity android:name=".graph.BarChartActivity"></activity>
+        <activity android:name=".help.OtherApps"></activity>
         <activity android:name=".start.StartActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
