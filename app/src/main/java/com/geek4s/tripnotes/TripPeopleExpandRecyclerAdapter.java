@@ -4,6 +4,7 @@ import android.animation.ObjectAnimator;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
@@ -28,7 +29,9 @@ import com.github.aakira.expandablelayout.Utils;
 
 import org.json.JSONArray;
 import org.json.JSONException;
+import org.json.JSONObject;
 
+import java.util.ArrayList;
 import java.util.List;
 
 
@@ -36,7 +39,7 @@ public class TripPeopleExpandRecyclerAdapter extends RecyclerView.Adapter<TripPe
 
     private final List<People> data;
     FoldingCellListAdapter.ViewHolder viewHolder;
-    private Context context;
+    public Context context;
     private static SparseBooleanArray expandState = new SparseBooleanArray();
     ;
     Trip trip;
@@ -105,6 +108,8 @@ public class TripPeopleExpandRecyclerAdapter extends RecyclerView.Adapter<TripPe
             holder.amountinfo.setText("<b><font color=#FF0000>*</font></b> Nothing you have to pay and get");
 
         }
+        holder.amountinfo.setBackgroundColor(Color.BLACK);
+
         holder.balanceamount.setText(balance + "");
 
 
@@ -114,7 +119,18 @@ public class TripPeopleExpandRecyclerAdapter extends RecyclerView.Adapter<TripPe
         holder.expandableLayout.setBackgroundColor(ContextCompat.getColor(context, R.color.cardview_dark_background));
         holder.expandableLayout.setInterpolator(Utils.createInterpolator(Utils.LINEAR_OUT_SLOW_IN_INTERPOLATOR));
         holder.expandableLayout.setExpanded(expandState.get(position));
-        JSONArray amt = item.getAmountSpentJSON();
+        final JSONArray amt = item.getAmountSpentJSON();
+
+
+        if (amt.length() == 0) {
+            holder.spentAmountHeadersLayout.setVisibility(View.GONE);
+            String text = "No spent amount details available. Click <b><i> Add New Spent</i></b> to add new spent";
+            holder.spentAmountInfo.setText(Html.fromHtml(text));
+            holder.spentAmountInfo.setVisibility(View.VISIBLE);
+            holder.spentAmountInfo.setBackgroundColor(context.getResources().getColor(R.color.btnRequest));
+        }
+
+
         if (amt != null) {
             {
                 if (amt.length() > 0) {
@@ -140,9 +156,35 @@ public class TripPeopleExpandRecyclerAdapter extends RecyclerView.Adapter<TripPe
                 }
             }
         }
+        holder.item1name.setTextColor(Color.BLACK);
+        holder.item1amount.setTextColor(Color.BLACK);
+        holder.item2name.setTextColor(Color.BLACK);
+        holder.item2amount.setTextColor(Color.BLACK);
 
 
-        holder.itemView.setOnLongClickListener(new View.OnLongClickListener() {
+        holder.layitem1.setBackgroundColor(context.getResources().getColor(R.color.btnRequest));
+        holder.layitem2.setBackgroundColor(context.getResources().getColor(R.color.btnRequest));
+
+        holder.layitem1.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View view) {
+                showSpentItemOptions(amt, 0, item);
+                return false;
+            }
+        });
+
+        holder.layitem2.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View view) {
+                showSpentItemOptions(amt, 1, item);
+                return false;
+            }
+        });
+
+
+        holder.itemView.setOnLongClickListener(new View.OnLongClickListener()
+
+        {
             @Override
             public boolean onLongClick(View view) {
                 if (!expandState.get(position)) {
@@ -174,7 +216,9 @@ public class TripPeopleExpandRecyclerAdapter extends RecyclerView.Adapter<TripPe
         });
 
 
-        holder.showmore.setOnClickListener(new View.OnClickListener() {
+        holder.showmore.setOnClickListener(new View.OnClickListener()
+
+        {
             @Override
             public void onClick(View view) {
                 ShowMorePeopleViewActivity.trip = trip;
@@ -185,7 +229,9 @@ public class TripPeopleExpandRecyclerAdapter extends RecyclerView.Adapter<TripPe
         });
 
 
-        holder.addNewSpent.setOnClickListener(new View.OnClickListener() {
+        holder.addNewSpent.setOnClickListener(new View.OnClickListener()
+
+        {
             @Override
             public void onClick(View view) {
                 new AddNewSpentAmount(context, trip, item).addNewSpentDialog();
@@ -212,13 +258,100 @@ public class TripPeopleExpandRecyclerAdapter extends RecyclerView.Adapter<TripPe
         });
 
         holder.buttonLayout.setRotation(expandState.get(position) ? 180f : 0f);
-        holder.buttonLayout.setOnClickListener(new View.OnClickListener() {
+        holder.buttonLayout.setOnClickListener(new View.OnClickListener()
+
+        {
             @Override
             public void onClick(final View v) {
                 onClickButton(holder.expandableLayout);
             }
         });
+
     }
+
+    private void showSpentItemOptions(JSONArray amt, int in, final People people) {
+        String[] options = {"", "", ""};
+        Drawable[] drawables = {context.getResources().getDrawable(R.drawable.edit_spend_item), context.getResources().getDrawable(R.drawable.delete_spent_item)};
+        String title = "";
+        ShowOptionsDialogs showOptionsDialogs = new ShowOptionsDialogs(context);
+        showOptionsDialogs.showOptionsDialogMethod(options, title, drawables);
+        JSONObject jsonSpentItem = null;
+        if (amt != null) {
+            if (amt.length() > 0) {
+                try {
+                    jsonSpentItem = amt.getJSONObject(in);
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+        final JSONObject finalJsonSpentItem = jsonSpentItem;
+        ShowOptionsDialogs.alert.setOnDismissListener(new DialogInterface.OnDismissListener() {
+            @Override
+            public void onDismiss(DialogInterface dialogInterface) {
+                if (ShowOptionsDialogs.selectedOption.equalsIgnoreCase("update")) {
+                    updateSpentAmount(finalJsonSpentItem, people);
+                } else if (ShowOptionsDialogs.selectedOption.equalsIgnoreCase("delete")) {
+                    deleteSpentAmount(finalJsonSpentItem, people);
+
+                } else if (ShowOptionsDialogs.selectedOption.equalsIgnoreCase("swap")) {
+                    swapSpentAmount(finalJsonSpentItem, people);
+
+                }
+            }
+        });
+
+
+    }
+
+    private void swapSpentAmount(JSONObject spentitem, People people) {
+        SwapSpentAmount swapSpentAmount = new SwapSpentAmount();
+        List peopleList = getAllPeoplesName(trip);
+        swapSpentAmount.swapSpentAMountDialog(context, trip, people, spentitem, peopleList);
+        SwapSpentAmount.alert.setOnDismissListener(new DialogInterface.OnDismissListener() {
+            @Override
+            public void onDismiss(DialogInterface dialogInterface) {
+
+            }
+        });
+    }
+
+    private List<String> getAllPeoplesName(Trip trip) {
+        List<String> ar = new ArrayList<String>();
+
+        for (int i = 0; i < trip.getPeoplesJSON().length(); i++) {
+            try {
+                JSONObject j = trip.getPeoplesJSON().getJSONObject(i);
+                ar.add(j.getString("name"));
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        }
+        return ar;
+    }
+
+    private void deleteSpentAmount(JSONObject spentItem, People people) {
+        DeleteSpentAmount deleteSpentAmount = new DeleteSpentAmount();
+        deleteSpentAmount.deleteSpentAmountDialog(context, trip, people, spentItem);
+        DeleteSpentAmount.alert.setOnDismissListener(new DialogInterface.OnDismissListener() {
+            @Override
+            public void onDismiss(DialogInterface dialogInterface) {
+
+            }
+        });
+    }
+
+    private void updateSpentAmount(JSONObject spentItem, People people) {
+        EditSpentAmount editSpentAmount = new EditSpentAmount();
+        editSpentAmount.editSpentDialog(context, trip, people, spentItem);
+        EditSpentAmount.alert.setOnDismissListener(new DialogInterface.OnDismissListener() {
+            @Override
+            public void onDismiss(DialogInterface dialogInterface) {
+
+            }
+        });
+    }
+
 
     private void deletePeople(People item) {
         DeletePeople deletePeople = new DeletePeople();
@@ -278,6 +411,7 @@ public class TripPeopleExpandRecyclerAdapter extends RecyclerView.Adapter<TripPe
         private final TextView maximumamount, spentamount;
         private final TextView balanceamount;
         private final TextView amountinfo;
+        private final TextView spentAmountInfo;
         public Button showmore;
         public TextView textView, listofPeolpleTextView, textviewamount;
         public LinearLayout layitem1, layitem2;
@@ -286,6 +420,8 @@ public class TripPeopleExpandRecyclerAdapter extends RecyclerView.Adapter<TripPe
         public Button addNewSpent;
 
         public RelativeLayout buttonLayout;
+
+        LinearLayout spentAmountHeadersLayout;
         /**
          * You must use the ExpandableLinearLayout in the recycler view.
          * The ExpandableRelativeLayout doesn't work.
@@ -316,6 +452,10 @@ public class TripPeopleExpandRecyclerAdapter extends RecyclerView.Adapter<TripPe
             layitem1.setVisibility(View.GONE);
             layitem2.setVisibility(View.GONE);
 
+            spentAmountHeadersLayout = (LinearLayout) v.findViewById(R.id.headers_for_spent_amount_layout);
+            spentAmountInfo = (TextView) v.findViewById(R.id.info_spent_amount_details);
+
+
 //            listofPeolpleTextView = (TextView) v.findViewById(R.id.people_list_textview);
 
 
@@ -330,7 +470,8 @@ public class TripPeopleExpandRecyclerAdapter extends RecyclerView.Adapter<TripPe
         return String.format("%." + len + "f", str);
     }
 
-    public ObjectAnimator createRotateAnimator(final View target, final float from, final float to) {
+    public ObjectAnimator createRotateAnimator(final View target, final float from,
+                                               final float to) {
         ObjectAnimator animator = ObjectAnimator.ofFloat(target, "rotation", from, to);
         animator.setDuration(300);
         animator.setInterpolator(Utils.createInterpolator(Utils.LINEAR_INTERPOLATOR));

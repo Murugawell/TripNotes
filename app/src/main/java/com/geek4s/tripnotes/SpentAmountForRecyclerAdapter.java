@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.graphics.drawable.Drawable;
 import android.support.v7.widget.RecyclerView;
+import android.text.Html;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -56,7 +57,6 @@ public class SpentAmountForRecyclerAdapter extends RecyclerView.Adapter<SpentAmo
             holder.itemView.setOnLongClickListener(new View.OnLongClickListener() {
                 @Override
                 public boolean onLongClick(View view) {
-                    Toast.makeText(context, "", Toast.LENGTH_SHORT).show();
                     String[] options = {"", "", ""};
                     Drawable[] drawables = {context.getResources().getDrawable(R.drawable.edit_spend_item), context.getResources().getDrawable(R.drawable.delete_spent_item)};
                     String title = "";
@@ -82,11 +82,15 @@ public class SpentAmountForRecyclerAdapter extends RecyclerView.Adapter<SpentAmo
                     return false;
                 }
             });
+
+
         } catch (JSONException e) {
             e.printStackTrace();
         } catch (Exception e) {
             e.printStackTrace();
         }
+
+
     }
 
     private void swapSpentAmount(JSONObject item) {
@@ -107,7 +111,7 @@ public class SpentAmountForRecyclerAdapter extends RecyclerView.Adapter<SpentAmo
         for (int i = 0; i < trip.getPeoplesJSON().length(); i++) {
             try {
                 JSONObject j = trip.getPeoplesJSON().getJSONObject(i);
-                ar.add( j.getString("name"));
+                ar.add(j.getString("name"));
             } catch (JSONException e) {
                 e.printStackTrace();
             }

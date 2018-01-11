@@ -155,7 +155,7 @@ public class ShowMorePeopleExpandRecyclerAdapter extends RecyclerView.Adapter<Sh
         int spentItemLength = item.getAmountSpentJSON().length();
         if (spentItemLength == 0) {
             holder.headersForSpentAmountLayout.setVisibility(View.GONE);
-            String text = "No spent amount details available. Click <b><i> Add New Spent</i></b> to create new spent";
+            String text = "No spent amount details available. Click <b><i> Add New Spent</i></b> to add new spent";
             holder.textviewInfoSpentAmountList.setText(Html.fromHtml(text));
             holder.textviewInfoSpentAmountList.setVisibility(View.VISIBLE);
             holder.textviewInfoSpentAmountList.setBackgroundColor(context.getResources().getColor(R.color.btnRequest));
@@ -173,7 +173,7 @@ public class ShowMorePeopleExpandRecyclerAdapter extends RecyclerView.Adapter<Sh
                 AddNewSpentAmount.alert.setOnDismissListener(new DialogInterface.OnDismissListener() {
                     @Override
                     public void onDismiss(DialogInterface dialogInterface) {
-                        ShowMorePeopleViewActivity.refresh(trip,item, context);
+                        ShowMorePeopleViewActivity.refresh(trip, item, context);
                     }
                 });
             }

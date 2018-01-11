@@ -12,19 +12,34 @@
         android:layout_height="wrap_content"
         android:orientation="vertical">
 
-        <TextView
-            android:id="@+id/cell_title_trip_name_textview"
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_gravity="center"
             android:background="@color/colorMainTitleBackground"
-            android:foregroundGravity="center"
-            android:gravity="center"
-            android:padding="5dp"
-            android:text="@string/trip_name"
-            android:textColor="@android:color/white"
-            android:textSize="20sp" />
+            android:paddingBottom="5dp"
+            android:paddingLeft="12dp"
+            android:paddingRight="12dp"
+            android:paddingTop="5dp">
 
+            <ImageView
+                android:id="@+id/cell_title_open_icon"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:src="@drawable/ic_fold" />
+
+            <TextView
+                android:id="@+id/cell_title_trip_name_textview"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:foregroundGravity="center"
+                android:gravity="center"
+                android:padding="5dp"
+                android:text="@string/trip_name"
+                android:textColor="@android:color/white"
+                android:textSize="20sp" />
+        </LinearLayout>
 
         <LinearLayout
             android:layout_width="match_parent"

@@ -97,6 +97,8 @@ public class FoldingCellListAdapter extends ArrayAdapter<Trip> {
             viewHolder.b_peopleLayout = (LinearLayout) cell.findViewById(R.id.cell_title_people_layout);
             viewHolder.b_peopleInfo = (TextView) cell.findViewById(R.id.content_people_info_textview);
 
+            viewHolder.f_trip_open_icon = (ImageView) cell.findViewById(R.id.cell_title_open_icon);
+
 
 //            viewHolder.b_addPeople.setBackgroundColor(getContext().getResources().getColor(R.color.colorPrimaryDark));
 //            int[] state = new int[]{android.R.attr.state_window_focused, android.R.attr.state_focused};
@@ -124,7 +126,7 @@ public class FoldingCellListAdapter extends ArrayAdapter<Trip> {
             });
 
             // open cell front side triptitle  click
-            viewHolder.f_triptitle.setOnClickListener(new View.OnClickListener() {
+            viewHolder.f_trip_open_icon.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
 
@@ -367,6 +369,7 @@ public class FoldingCellListAdapter extends ArrayAdapter<Trip> {
         LinearLayout f_peopleLayout;
         TextView b_peopleInfo;
 
+        ImageView f_trip_open_icon;
     }
 
     private String getDateTime(long t, String input) {
