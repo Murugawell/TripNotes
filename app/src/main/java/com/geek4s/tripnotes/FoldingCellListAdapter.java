@@ -3,8 +3,10 @@ package com.geek4s.tripnotes;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Color;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.Html;
 import android.text.format.DateFormat;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -93,6 +95,7 @@ public class FoldingCellListAdapter extends ArrayAdapter<Trip> {
             viewHolder.b_close = (ImageView) cell.findViewById(R.id.content_header_title_left_icon_imageview);
             viewHolder.b_edit_trip = (ImageButton) cell.findViewById(R.id.content_header_edit_trip_main);
             viewHolder.b_peopleLayout = (LinearLayout) cell.findViewById(R.id.cell_title_people_layout);
+            viewHolder.b_peopleInfo = (TextView) cell.findViewById(R.id.content_people_info_textview);
 
 
 //            viewHolder.b_addPeople.setBackgroundColor(getContext().getResources().getColor(R.color.colorPrimaryDark));
@@ -202,6 +205,14 @@ public class FoldingCellListAdapter extends ArrayAdapter<Trip> {
             viewHolder.b_fromAddress.setText(item.getFrom());
             viewHolder.b_toAddress.setText(item.getTo());
 
+            viewHolder.b_peopleInfo.setTextColor(Color.BLACK);
+            if (item.getPeoples().length == 0) {
+                String txt = "No people available. Click <b><i> Add People</i></b> to add new people in <b>" + item.getName() + "</b> trip";
+                viewHolder.b_peopleInfo.setText(Html.fromHtml(txt));
+                viewHolder.b_peopleInfo.setBackgroundColor(getContext().getResources().getColor(R.color.btnRequest));
+            } else {
+                viewHolder.b_peopleInfo.setVisibility(View.GONE);
+            }
             viewHolder.b_showAllPeople.setVisibility(View.GONE);
             // show all people button ,only if more than 3
             if (item.getPeoples().length > 3) {
@@ -354,6 +365,7 @@ public class FoldingCellListAdapter extends ArrayAdapter<Trip> {
         ImageButton b_edit_trip;
         LinearLayout b_peopleLayout;
         LinearLayout f_peopleLayout;
+        TextView b_peopleInfo;
 
     }
 

@@ -4,8 +4,10 @@ import android.animation.ObjectAnimator;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.drawable.Drawable;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
+import android.text.Html;
 import android.util.SparseBooleanArray;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -85,19 +87,22 @@ public class TripPeopleExpandRecyclerAdapter extends RecyclerView.Adapter<TripPe
         if (balance < 0) {
             holder.balanceamount.setCompoundDrawablesWithIntrinsicBounds(R.drawable.minus_amount, 0, 0, 0);
             holder.balanceamount.setTextColor(0xFFFC092E);
-
-            holder.amountinfo.setText("You have to pay");
+            String msg = "<b><font color=#FF0000>*</font></b> At the end of trip you have to <b><font color=#FF0000>give</font></b>";
+            String text = msg + " <b><font color=#ffffff>" + (balance * -1) + "</font></b>";
+            holder.amountinfo.setText(Html.fromHtml(text));
 
         } else if (balance > 0) {
             holder.balanceamount.setCompoundDrawablesWithIntrinsicBounds(R.drawable.plus_amount, 0, 0, 0);
             holder.balanceamount.setTextColor(0xFF09FC03);
 
-            holder.amountinfo.setText("You will get");
+            String msg = "<b><font color=#FF0000>*</font></b> At the end of trip you will <b><font color=#00FF00>get</font></b>";
+            String text = msg + " <b><font color=#ffffff>" + (balance) + "</font></b>";
+            holder.amountinfo.setText(Html.fromHtml(text));
 
         } else {
             holder.balanceamount.setCompoundDrawablesWithIntrinsicBounds(R.drawable.equal_amount, 0, 0, 0);
 
-            holder.amountinfo.setText("Nothing to pay and get");
+            holder.amountinfo.setText("<b><font color=#FF0000>*</font></b> Nothing you have to pay and get");
 
         }
         holder.balanceamount.setText(balance + "");
@@ -135,6 +140,38 @@ public class TripPeopleExpandRecyclerAdapter extends RecyclerView.Adapter<TripPe
                 }
             }
         }
+
+
+        holder.itemView.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View view) {
+                if (!expandState.get(position)) {
+                    /*  */
+
+                    String[] options = {"", ""};
+                    String title = "";
+                    Drawable[] drawables = {context.getResources().getDrawable(R.drawable.edit_people), context.getResources().getDrawable(R.drawable.remove_people)};
+
+                    ShowOptionsDialogs showOptionsDialogs = new ShowOptionsDialogs(context);
+                    showOptionsDialogs.showOptionsDialogMethod(options, title, drawables);
+
+                    ShowOptionsDialogs.alert.setOnDismissListener(new DialogInterface.OnDismissListener() {
+                        @Override
+                        public void onDismiss(DialogInterface dialogInterface) {
+                            if (ShowOptionsDialogs.selectedOption.equalsIgnoreCase("update")) {
+                                editPeople(item);
+                            } else if (ShowOptionsDialogs.selectedOption.equalsIgnoreCase("delete")) {
+                                deletePeople(item);
+                            }
+                        }
+                    });
+
+
+                }
+
+                return false;
+            }
+        });
 
 
         holder.showmore.setOnClickListener(new View.OnClickListener() {
@@ -182,6 +219,30 @@ public class TripPeopleExpandRecyclerAdapter extends RecyclerView.Adapter<TripPe
             }
         });
     }
+
+    private void deletePeople(People item) {
+        DeletePeople deletePeople = new DeletePeople();
+        deletePeople.deletePeopleDialog(context, trip, item);
+        DeletePeople.alert.setOnDismissListener(new DialogInterface.OnDismissListener() {
+            @Override
+            public void onDismiss(DialogInterface dialogInterface) {
+                Toast.makeText(context, "", Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
+    private void editPeople(People item) {
+
+        EditPeople editPeople = new EditPeople(context);
+        editPeople.editPeopleDialog(trip, item);
+        EditPeople.alert.setOnDismissListener(new DialogInterface.OnDismissListener() {
+            @Override
+            public void onDismiss(DialogInterface dialogInterface) {
+                Toast.makeText(context, "", Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
 
     //    merthod to add padding at the eod of string
     private String formatedString(String name, int maxLength) {

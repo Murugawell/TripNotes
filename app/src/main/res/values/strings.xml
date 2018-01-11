@@ -50,13 +50,13 @@
     <string name="showmore">Show More</string>
     <string name="people_estimatedamount_display_label">MAXIMUM AMOUNT</string>
     <string name="people_maximum_amount_display_label">MAXIMUM AMOUNT</string>
-    <string name="people_spent_amount_display_label">AMOUNT SPENT</string>
+    <string name="people_spent_amount_display_label">SPENT AMOUNT</string>
     <string name="people_balance_amount_display_label">BALANCE AMOUNT</string>
     <string name="editSpent">EDIT SPENT</string>
     <string name="action_refresh">Refresh</string>
     <string name="spent_amount_details">Spent Amount Details</string>
     <string name="amount_for_item">Item</string>
-    <string name="amount_spent_value">Amount Spent</string>
+    <string name="amount_spent_value">Spent Amount</string>
     <string name="action_help">Help</string>
     <string name="icon">Icon</string>
 </resources>
