@@ -25,6 +25,7 @@ import com.geek4s.tripnotes.bean.Trip;
 import com.geek4s.tripnotes.graph.BarChartActivity;
 import com.geek4s.tripnotes.help.HelpActivity;
 import com.geek4s.tripnotes.help.OtherApps;
+import com.geek4s.tripnotes.help.ShowHelpActivity;
 import com.ramotion.foldingcell.FoldingCell;
 
 import java.util.ArrayList;
@@ -124,7 +125,7 @@ public class MainActivity extends AppCompatActivity {
             showListOfTrips(this);
             return true;
         } else if (id == R.id.action_help) {
-            startActivity(new Intent(MainActivity.this, HelpActivity.class));
+            startActivity(new Intent(MainActivity.this, ShowHelpActivity.class));
             overridePendingTransition(R.anim.move_right_in_activity, R.anim.move_left_out_activity);
 
             return true;

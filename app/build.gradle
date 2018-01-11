@@ -32,4 +32,5 @@ dependencies {
     compile 'com.github.clans:fab:1.6.4'
     compile 'com.github.aakira:expandable-layout:1.6.0@aar'
     implementation 'com.github.PhilJay:MPAndroidChart:v3.0.3'
+    compile 'com.github.deano2390:MaterialShowcaseView:1.2.0'
 }
