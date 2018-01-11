@@ -305,7 +305,7 @@ public class TripPeopleExpandRecyclerAdapter extends RecyclerView.Adapter<TripPe
     }
 
     private void swapSpentAmount(JSONObject spentitem, People people) {
-        SwapSpentAmount swapSpentAmount = new SwapSpentAmount();
+        SwapSpentAmount swapSpentAmount = new SwapSpentAmount(context);
         List peopleList = getAllPeoplesName(trip);
         swapSpentAmount.swapSpentAMountDialog(context, trip, people, spentitem, peopleList);
         SwapSpentAmount.alert.setOnDismissListener(new DialogInterface.OnDismissListener() {
@@ -331,7 +331,7 @@ public class TripPeopleExpandRecyclerAdapter extends RecyclerView.Adapter<TripPe
     }
 
     private void deleteSpentAmount(JSONObject spentItem, People people) {
-        DeleteSpentAmount deleteSpentAmount = new DeleteSpentAmount();
+        DeleteSpentAmount deleteSpentAmount = new DeleteSpentAmount(context);
         deleteSpentAmount.deleteSpentAmountDialog(context, trip, people, spentItem);
         DeleteSpentAmount.alert.setOnDismissListener(new DialogInterface.OnDismissListener() {
             @Override
@@ -342,7 +342,7 @@ public class TripPeopleExpandRecyclerAdapter extends RecyclerView.Adapter<TripPe
     }
 
     private void updateSpentAmount(JSONObject spentItem, People people) {
-        EditSpentAmount editSpentAmount = new EditSpentAmount();
+        EditSpentAmount editSpentAmount = new EditSpentAmount(context);
         editSpentAmount.editSpentDialog(context, trip, people, spentItem);
         EditSpentAmount.alert.setOnDismissListener(new DialogInterface.OnDismissListener() {
             @Override
@@ -354,7 +354,7 @@ public class TripPeopleExpandRecyclerAdapter extends RecyclerView.Adapter<TripPe
 
 
     private void deletePeople(People item) {
-        DeletePeople deletePeople = new DeletePeople();
+        DeletePeople deletePeople = new DeletePeople(context);
         deletePeople.deletePeopleDialog(context, trip, item);
         DeletePeople.alert.setOnDismissListener(new DialogInterface.OnDismissListener() {
             @Override

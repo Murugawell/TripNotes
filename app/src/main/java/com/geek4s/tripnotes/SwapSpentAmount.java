@@ -6,28 +6,24 @@ import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
 import android.support.v7.widget.AppCompatSpinner;
-import android.text.Editable;
 import android.text.Html;
-import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
-import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.geek4s.tripnotes.bean.JSON;
 import com.geek4s.tripnotes.bean.People;
 import com.geek4s.tripnotes.bean.Trip;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -41,8 +37,8 @@ public class SwapSpentAmount {
     public static AlertDialog alert;
     private String[] listOfPeoples;
 
-    SwapSpentAmount() {
-
+    SwapSpentAmount(Context context) {
+        this.context = context;
     }
 
 
@@ -128,11 +124,51 @@ public class SwapSpentAmount {
 
     }
 
-    private void swapSpentAmount(Trip trip, People people, JSONObject jsonObject, String personSeleted) {
-        /*
-                jsonObject contains spentamount details
-                personSelected contains name of the person whom you want to swap
+    private String swapSpentAmount(Trip trip, People people, JSONObject jsonObject, String personSeleted) {
+        JSONObject tripObject = trip.getTripJSON();
+        try {
+            JSONArray peopleArray = getNewPeoples(trip, people, jsonObject, personSeleted);
+            tripObject.put(JSON.Trip.people, peopleArray);
+        } catch (JSONException e) {
+            return e.getMessage();
+        }
+        Datas datas = new Datas(context);
+        datas.open();
+        datas.deleteTrip(trip.getName());
+        datas.createTrip(trip.getName(), tripObject.toString());
+        datas.close();
+        return "Swaped Successfuly";
+    }
 
-         */
+    private JSONArray getNewPeoples(Trip trip, People people, JSONObject jsonObject, String personSelected) throws JSONException {
+        JSONArray peopleArray = trip.getPeoplesJSON();
+        for (int i = 0; i < peopleArray.length(); i++) {
+            if (peopleArray.getJSONObject(i).getString(JSON.People.name).equals(people.getName())) {
+                peopleArray.getJSONObject(i).put(JSON.People.amountSpent, newAmountSpentClear(people, jsonObject));
+            }
+            if (peopleArray.getJSONObject(i).getString(JSON.People.name).equals(personSelected)) {
+                People people1 = trip.getPeople(personSelected);
+                peopleArray.getJSONObject(i).put(JSON.People.amountSpent, newAmountSpentAdd(people1, jsonObject));
+            }
+        }
+        return peopleArray;
+    }
+
+    private JSONArray newAmountSpentClear(People people, JSONObject jsonObject) throws JSONException {
+        JSONArray array = people.getAmountSpentJSON();
+        JSONArray array1 = new JSONArray();
+        for (int i = 0; i < array.length(); i++) {
+            if (array.getJSONObject(i).getString(JSON.Amount.amountFor).equals(jsonObject.getString(JSON.Amount.amountFor))) {
+                continue;
+            }
+            array1.put(array.getJSONObject(i));
+        }
+        return array1;
+    }
+
+    private JSONArray newAmountSpentAdd(People people, JSONObject jsonObject) throws JSONException {
+        JSONArray array = people.getAmountSpentJSON();
+        array.put(jsonObject);
+        return array;
     }
 }

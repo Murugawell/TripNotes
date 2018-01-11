@@ -15,8 +15,13 @@ import android.widget.RadioGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.geek4s.tripnotes.bean.JSON;
 import com.geek4s.tripnotes.bean.People;
 import com.geek4s.tripnotes.bean.Trip;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 /**
  * Created by Murugavel on 12/29/2017.
@@ -31,7 +36,7 @@ public class EditPeople {
         context = con;
     }
 
-    public void editPeopleDialog(Trip trip, People people) {
+    public void editPeopleDialog(final Trip trip, final People people) {
         LayoutInflater li = LayoutInflater.from(context);
         final View promptsView = li.inflate(R.layout.addnewperson, null);
         final AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(context);
@@ -102,7 +107,7 @@ public class EditPeople {
                         b = false;
                         maxAmount = Float.parseFloat(editText_tripPeopleAssignAmount.getText().toString().trim());
                     }
-                    String s = updatePeople(name, b, maxAmount);
+                    String s = updatePeople(name, b, maxAmount, trip, people);
                     Toast.makeText(context, s, Toast.LENGTH_LONG).show();
                     alert.cancel();
                 }
@@ -120,8 +125,51 @@ public class EditPeople {
 
     }
 
-    private String updatePeople(String name, boolean b, float maxAmount) {
-        return "";
+    private String updatePeople(String name, boolean b, float maxAmount, Trip trip, People people) {
+        JSONArray peopleArray = trip.getPeoplesJSON();
+        JSONObject tripArray = trip.getTripJSON();
+        try {
+            JSONArray newPeopleArray = getNewPeopleArray(name, b, maxAmount, peopleArray, trip);
+            tripArray.put(JSON.Trip.people, newPeopleArray);
+        } catch (JSONException e) {
+            return e.getMessage();
+        }
+        Datas datas = new Datas(context);
+        datas.open();
+        datas.deleteTrip(trip.getName());
+        datas.createTrip(trip.getName(), tripArray.toString());
+        datas.close();
+        return "Successfuly Updated";
+    }
+
+    private JSONArray getNewPeopleArray(String name, boolean b, float maxAmount, JSONArray peopleArray, Trip trip) throws JSONException {
+        Toast.makeText(context, maxAmount+"", Toast.LENGTH_SHORT).show();
+        JSONArray array = new JSONArray();
+        float amount = 0;
+        if (b == false)
+            amount += maxAmount;
+        int shared = trip.totalPeopleSharing();
+        if (b)
+            shared += 1;
+        amount = trip.getEstimateAmount() - amount;
+        amount = amount / shared;
+        for (int i = 0; i < peopleArray.length(); i++) {
+            JSONObject jsonObject = peopleArray.getJSONObject(i);
+            if (jsonObject.getString(JSON.People.name).equals(name)) {
+                jsonObject.put(JSON.People.name, name);
+                jsonObject.put(JSON.People.isShared, b);
+                if (b)
+                    jsonObject.put(JSON.People.maxAmount, amount);
+                else
+                    jsonObject.put(JSON.People.maxAmount, maxAmount);
+            }
+            else {
+                if (jsonObject.getBoolean(JSON.People.isShared))
+                    jsonObject.put(JSON.People.maxAmount, amount);
+            }
+            array.put(jsonObject);
+        }
+        return array;
     }
 
 
