@@ -22,6 +22,7 @@ import java.util.Calendar;
 public class AddNewTrip {
 
     Context context;
+    public static AlertDialog alert;
 
     AddNewTrip(Context con) {
         context = con;
@@ -33,7 +34,7 @@ public class AddNewTrip {
         final AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(context);
         alertDialogBuilder.setView(promptsView);
         alertDialogBuilder.setCancelable(false);
-        final AlertDialog alert = alertDialogBuilder.create();
+        alert = alertDialogBuilder.create();
         /*Window window = alert.getWindow();
         alert.getWindow().getAttributes().windowAnimations = R.style.DialogTheme2; //style id
         WindowManager.LayoutParams wlp = window.getAttributes();*/
@@ -65,9 +66,7 @@ public class AddNewTrip {
                     editText_tripEstimateAmount.requestFocus();
                 } else {
                     String output = createTrip(tripName, tripestimateamount, from, to);
-                    Toast.makeText(context, output, Toast.LENGTH_LONG).show();
-                    MainActivity.getTripListFromDB(context);
-                    MainActivity.showListOfTrips(context);
+                    Toast.makeText(context, output, Toast.LENGTH_SHORT).show();
                     alert.cancel();
                 }
             }

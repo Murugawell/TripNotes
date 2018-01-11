@@ -4,6 +4,7 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -31,6 +32,9 @@ import com.ramotion.foldingcell.FoldingCell;
 import java.util.ArrayList;
 import java.util.Collections;
 
+import uk.co.deanwild.materialshowcaseview.MaterialShowcaseSequence;
+import uk.co.deanwild.materialshowcaseview.ShowcaseConfig;
+
 public class MainActivity extends AppCompatActivity {
     public static ArrayList<Trip> allTrips = null;
     static ListView theListView;
@@ -56,6 +60,15 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 new AddNewTrip(con).addTripDialog();
+                AddNewTrip.alert.setOnDismissListener(new DialogInterface.OnDismissListener() {
+
+                    @Override
+                    public void onDismiss(DialogInterface dialogInterface) {
+                        getTripListFromDB(getApplicationContext());
+                        showListOfTrips(getApplicationContext());
+                    }
+                });
+
             }
         });
 
@@ -67,6 +80,16 @@ public class MainActivity extends AppCompatActivity {
 
         // show all the trips
         showListOfTrips(this);
+
+
+        ShowcaseConfig showcaseConfig = new ShowcaseConfig();
+        showcaseConfig.setDelay(500); // half second between each showcase view
+        showcaseConfig.setMaskColor(0xDD000000);
+        showcaseConfig.setDismissTextColor(Color.MAGENTA);
+        MaterialShowcaseSequence sequence = new MaterialShowcaseSequence(this, "1234");
+        sequence.addSequenceItem(fab, "Click this button to create new trip", "Got It");
+        sequence.setConfig(showcaseConfig);
+        sequence.start();
     }
 
     public static void getTripListFromDB(Context context) {
@@ -86,12 +109,17 @@ public class MainActivity extends AppCompatActivity {
     public static void showListOfTrips(Context context) {
         if (allTrips != null) {
             if (allTrips.size() > 0) {
+                theListView.setVisibility(View.VISIBLE);
+
                 // create custom adapter that holds elements and their state (we need hold a id's of unfolded elements for reusable elements)
                 adapter = new FoldingCellListAdapter(context, allTrips);
                 adap = adapter;
 
                 // set elements to adapter
                 theListView.setAdapter(adapter);
+            }
+            if (allTrips.size() == 0) {
+                theListView.setVisibility(View.GONE);
             }
         }
 

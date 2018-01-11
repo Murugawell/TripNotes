@@ -37,10 +37,11 @@ public class FoldingCellListAdapter extends ArrayAdapter<Trip> {
     private HashSet<Integer> unfoldedIndexes = new HashSet<>();
     private View.OnClickListener defaultRequestBtnClickListener;
     private RecyclerView recyclerView;
-
+    public Context context;
 
     public FoldingCellListAdapter(Context context, List<Trip> objects) {
         super(context, 0, objects);
+        this.context = context;
     }
 
     @Override
@@ -66,7 +67,7 @@ public class FoldingCellListAdapter extends ArrayAdapter<Trip> {
 
         if (cell == null) {
             viewHolder = new ViewHolder();
-            LayoutInflater vi = LayoutInflater.from(getContext());
+            LayoutInflater vi = LayoutInflater.from(context);
             cell = (FoldingCell) vi.inflate(R.layout.cell, parent, false);
             // binding view parts to view holder
             // front side
@@ -100,7 +101,7 @@ public class FoldingCellListAdapter extends ArrayAdapter<Trip> {
             viewHolder.f_trip_open_icon = (ImageView) cell.findViewById(R.id.cell_title_open_icon);
 
 
-//            viewHolder.b_addPeople.setBackgroundColor(getContext().getResources().getColor(R.color.colorPrimaryDark));
+//            viewHolder.b_addPeople.setBackgroundColor(context.getResources().getColor(R.color.colorPrimaryDark));
 //            int[] state = new int[]{android.R.attr.state_window_focused, android.R.attr.state_focused};
 //
 
@@ -108,7 +109,7 @@ public class FoldingCellListAdapter extends ArrayAdapter<Trip> {
 
 //
 //            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
-//                viewHolder.b_close.setBackground(getContext().getResources().getDrawable(R.drawable.fold_icon));
+//                viewHolder.b_close.setBackground(context.getResources().getDrawable(R.drawable.fold_icon));
 //            }
 
             // fold cell back side close button click
@@ -142,7 +143,7 @@ public class FoldingCellListAdapter extends ArrayAdapter<Trip> {
 //            cell.setOnLongClickListener(new View.OnLongClickListener() {
 //                @Override
 //                public boolean onLongClick(View view) {
-//                    Toast.makeText(getContext(), "Long", Toast.LENGTH_LONG).show();
+//                    Toast.makeText(context, "Long", Toast.LENGTH_LONG).show();
 //                    return false;
 //                }
 //            });
@@ -151,15 +152,15 @@ public class FoldingCellListAdapter extends ArrayAdapter<Trip> {
             viewHolder.b_addPeople.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    new AddNewPeople(getContext(), viewHolder.b_triptitle.getText().toString()).addPeopleDialog();
+                    new AddNewPeople(context, viewHolder.b_triptitle.getText().toString()).addPeopleDialog();
                 }
             });
 
 
             // recyclerview for list of peoples
             recyclerView = (RecyclerView) cell.findViewById(R.id.recyclerView);
-            recyclerView.addItemDecoration(new DividerItemDecoration(getContext()));
-            recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+            recyclerView.addItemDecoration(new DividerItemDecoration(context));
+            recyclerView.setLayoutManager(new LinearLayoutManager(context));
 
             final List<People> peopleList = convertJSONARRAYtoLIST(item.getPeoples());
 
@@ -211,7 +212,7 @@ public class FoldingCellListAdapter extends ArrayAdapter<Trip> {
             if (item.getPeoples().length == 0) {
                 String txt = "No people available. Click <b><i> Add People</i></b> to add new people in <b>" + item.getName() + "</b> trip";
                 viewHolder.b_peopleInfo.setText(Html.fromHtml(txt));
-                viewHolder.b_peopleInfo.setBackgroundColor(getContext().getResources().getColor(R.color.btnRequest));
+                viewHolder.b_peopleInfo.setBackgroundColor(context.getResources().getColor(R.color.btnRequest));
             } else {
                 viewHolder.b_peopleInfo.setVisibility(View.GONE);
             }
@@ -222,14 +223,14 @@ public class FoldingCellListAdapter extends ArrayAdapter<Trip> {
             }
 
 
-//            viewHolder.b_close.setBackgroundColor(getContext().getResources().getColor(R.color.background1));
+//            viewHolder.b_close.setBackgroundColor(context.getResources().getColor(R.color.background1));
 
             // back title long press to delete
             viewHolder.b_triptitle.setOnLongClickListener(new View.OnLongClickListener() {
                 @Override
                 public boolean onLongClick(View view) {
-                    DeleteTrip deleteTrip = new DeleteTrip(getContext());
-                    deleteTrip.deleteTripDialog(getContext(), item);
+                    DeleteTrip deleteTrip = new DeleteTrip(context);
+                    deleteTrip.deleteTripDialog(context, item);
                     DeleteTrip.alert.setOnDismissListener(new DialogInterface.OnDismissListener() {
                         @Override
                         public void onDismiss(DialogInterface dialogInterface) {
@@ -244,14 +245,21 @@ public class FoldingCellListAdapter extends ArrayAdapter<Trip> {
             viewHolder.f_triptitle.setOnLongClickListener(new View.OnLongClickListener() {
                 @Override
                 public boolean onLongClick(View view) {
-                    DeleteTrip deleteTrip = new DeleteTrip(getContext());
-                    deleteTrip.deleteTripDialog(getContext(), item);
-                    DeleteTrip.alert.setOnDismissListener(new DialogInterface.OnDismissListener() {
-                        @Override
-                        public void onDismiss(DialogInterface dialogInterface) {
 
-                        }
-                    });
+                    try {
+                        DeleteTrip deleteTrip = new DeleteTrip(context);
+                        deleteTrip.deleteTripDialog(context, item);
+                        DeleteTrip.alert.setOnDismissListener(new DialogInterface.OnDismissListener() {
+                            @Override
+                            public void onDismiss(DialogInterface dialogInterface) {
+                                MainActivity.getTripListFromDB(context);
+                                MainActivity.showListOfTrips(context);
+                            }
+                        });
+                        return false;
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
                     return false;
                 }
             });
@@ -264,8 +272,8 @@ public class FoldingCellListAdapter extends ArrayAdapter<Trip> {
                 public void onClick(View view) {
                     ShowMorePeopleViewActivity.trip = temptrip;
                     Log.i("add", temptrip.toString());
-                    Intent in = new Intent(getContext(), ShowMorePeopleViewActivity.class);
-                    getContext().startActivity(in);
+                    Intent in = new Intent(context, ShowMorePeopleViewActivity.class);
+                    context.startActivity(in);
 
                 }
             });
@@ -275,8 +283,8 @@ public class FoldingCellListAdapter extends ArrayAdapter<Trip> {
                 @Override
                 public void onClick(View view) {
                     ShowMorePeopleViewActivity.trip = temptrip;
-                    Intent in = new Intent(getContext(), ShowMorePeopleViewActivity.class);
-                    getContext().startActivity(in);
+                    Intent in = new Intent(context, ShowMorePeopleViewActivity.class);
+                    context.startActivity(in);
                 }
             });
 
@@ -285,8 +293,8 @@ public class FoldingCellListAdapter extends ArrayAdapter<Trip> {
                 @Override
                 public boolean onLongClick(View view) {
                     ShowMorePeopleViewActivity.trip = temptrip;
-                    Intent in = new Intent(getContext(), ShowMorePeopleViewActivity.class);
-                    getContext().startActivity(in);
+                    Intent in = new Intent(context, ShowMorePeopleViewActivity.class);
+                    context.startActivity(in);
                     return false;
                 }
             });
@@ -295,14 +303,14 @@ public class FoldingCellListAdapter extends ArrayAdapter<Trip> {
                 @Override
                 public void onClick(View view) {
                     ShowMorePeopleViewActivity.trip = temptrip;
-                    Intent in = new Intent(getContext(), ShowMorePeopleViewActivity.class);
-                    getContext().startActivity(in);
+                    Intent in = new Intent(context, ShowMorePeopleViewActivity.class);
+                    context.startActivity(in);
 
                 }
             });
 
         } catch (Exception e) {
-            Toast.makeText(getContext(), e.toString(), Toast.LENGTH_LONG).show();
+            Toast.makeText(context, e.toString(), Toast.LENGTH_LONG).show();
         }
 
         return cell;

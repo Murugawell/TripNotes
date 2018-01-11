@@ -42,7 +42,7 @@ public class ShowHelpActivity extends AppCompatActivity {
         TextView f_tripAmount = (TextView) findViewById(R.id.title_amount);
 
         f_estimatedAmount.setText("xxxx");
-        f_peopleCount.setText("5");
+        f_peopleCount.setText("x");
         f_tripAmount.setText("xxxx");
         f_fromAddress.setText("Source place");
         f_toAddress.setText("Destination place");
@@ -52,7 +52,7 @@ public class ShowHelpActivity extends AppCompatActivity {
 
         h = new HashMap<>();
         h.put("view", f_trip_open_icon);
-        h.put("content", "By Clicking this you can see the full trip details");
+        h.put("content", "By clicking this icon you can see the full trip details");
         h.put("dismisstext", "Got It");
         l.add(h);
 
