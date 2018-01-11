@@ -11,6 +11,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.geek4s.tripnotes.bean.JSON;
 import com.geek4s.tripnotes.bean.People;
 import com.geek4s.tripnotes.bean.Trip;
 
@@ -28,8 +29,8 @@ public class EditSpentAmount {
     People people;
     public static AlertDialog alert;
 
-    EditSpentAmount() {
-
+    EditSpentAmount(Context context) {
+        this.context = context;
     }
 
     public void editSpentDialog(final Context context, final Trip trip, final People people, JSONObject jsonObject) {
@@ -94,7 +95,43 @@ public class EditSpentAmount {
 
     }
 
-    private void updateAmount(Trip trip, People people, String amountFor, String amount) {
+    private String updateAmount(Trip trip, People people, String amountFor, String amount) {
+        JSONObject tripObject = trip.getTripJSON();
+        try {
+            JSONArray peopleArray = getNewPeoples(trip, people, new JSONObject().put(JSON.Amount.amountFor, amountFor).put(JSON.Amount.amount, amount));
+            tripObject.put(JSON.Trip.people, peopleArray);
+        } catch (JSONException e) {
+            return e.getMessage();
+        }
+        Datas datas = new Datas(context);
+        datas.open();
+        datas.deleteTrip(trip.getName());
+        datas.createTrip(trip.getName(), tripObject.toString());
+        datas.close();
+        return "Updated Successfuly";
+    }
+
+    private JSONArray getNewPeoples(Trip trip, People people, JSONObject jsonObject) throws JSONException {
+        JSONArray peopleArray = trip.getPeoplesJSON();
+        for (int i = 0; i < peopleArray.length(); i++) {
+            if (peopleArray.getJSONObject(i).getString(JSON.People.name).equals(people.getName())) {
+                peopleArray.getJSONObject(i).put(JSON.People.amountSpent, newAmountSpent(people, jsonObject));
+            }
+        }
+        return peopleArray;
+    }
+
+    private JSONArray newAmountSpent(People people, JSONObject jsonObject) throws JSONException {
+        JSONArray array = people.getAmountSpentJSON();
+        JSONArray array1 = new JSONArray();
+        for (int i = 0; i < array.length(); i++) {
+            if (array.getJSONObject(i).getString(JSON.Amount.amountFor).equals(jsonObject.getString(JSON.Amount.amountFor))) {
+                array.getJSONObject(i).put(JSON.Amount.amountFor, jsonObject.getString(JSON.Amount.amountFor));
+                array.getJSONObject(i).put(JSON.Amount.amount, jsonObject.getString(JSON.Amount.amount));
+            }
+            array1.put(array.getJSONObject(i));
+        }
+        return array1;
     }
 
 }

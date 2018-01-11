@@ -17,6 +17,10 @@ import android.widget.TextView;
 
 import com.geek4s.tripnotes.bean.Trip;
 
+import org.json.JSONArray;
+
+import java.util.ArrayList;
+
 /**
  * Created by Murugavel on 12/29/2017.
  */
@@ -25,7 +29,8 @@ public class DeleteTrip {
     Context context;
     public static AlertDialog alert;
 
-    DeleteTrip() {
+    public DeleteTrip(Context context) {
+        this.context = context;
     }
 
     public void deleteTripDialog(Context context, final Trip trip) {
@@ -87,7 +92,11 @@ public class DeleteTrip {
     }
 
     private String deleteTrip(Trip trip) {
-        return "";
+        Datas datas = new Datas(context);
+        datas.open();
+        datas.deleteTrip(trip.getName());
+        datas.close();
+        return "Deleted Successfuly";
     }
 
 

@@ -110,4 +110,43 @@ public class Trip {
         catch (Exception e) {}
         return jsonArray;
     }
+
+    public int totalPeople() {
+        return peoples.length;
+    }
+
+    public float maxAmountUnsharedPeople() {
+        float amount = 0;
+        for (People people : peoples) {
+            if (people.getIsShared() == false)
+                amount += people.getMaxAmount();
+        }
+        return amount;
+    }
+
+    public int totalPeopleSharing() {
+        int i = 0;
+        for (People people : peoples) {
+            if (people.getIsShared())
+                i++;
+        }
+        return i;
+    }
+
+    public int totalPeopleNotSharing() {
+        int i = 0;
+        for (People people : peoples) {
+            if (people.getIsShared() == false)
+                i++;
+        }
+        return i;
+    }
+
+    public People getPeople(String name) {
+        People people = null;
+        for (People people1 : peoples)
+            if (people1.getName().equals(name))
+                people = people1;
+        return people;
+    }
 }

@@ -22,10 +22,12 @@ import android.widget.RadioGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.geek4s.tripnotes.bean.JSON;
 import com.geek4s.tripnotes.bean.People;
 import com.geek4s.tripnotes.bean.Trip;
 
 import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 
 /**
@@ -36,10 +38,11 @@ public class DeletePeople {
     Context context;
     public static AlertDialog alert;
 
-    DeletePeople() {
+    DeletePeople(Context context) {
+        this.context = context;
     }
 
-    public void deletePeopleDialog(Context context, final Trip trip, final People people) {
+    public void deletePeopleDialog(final Context context, final Trip trip, final People people) {
         String title = "<h4><b><font color=#FF1000>Remove ?</b></font></h4>";
         String message = "Are you sure to remove " + "<b><font color=#FF34DD>" + people.getName() + "</font></b> from <b><font color=#FF34DD>" + trip.getName() + "</font></b>" + " trip ?";
         String warning = "<i>This can't be reversed</i>";
@@ -89,7 +92,8 @@ public class DeletePeople {
         confirm.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                deletePeople(trip, people);
+                String s = deletePeople(trip, people);
+                Toast.makeText(context, s, Toast.LENGTH_SHORT).show();
                 alert.cancel();
             }
         });
@@ -98,7 +102,46 @@ public class DeletePeople {
     }
 
     private String deletePeople(Trip trip, People people) {
-        return "";
+        if (people.getAmountSpent().size() > 0)
+            return "Please transfer the spent amount of " + people.getName() + " to other person before deleting";
+        JSONArray peopleArray = trip.getPeoplesJSON();
+        JSONObject tripArray = trip.getTripJSON();
+        try {
+            JSONArray newPeopleArray = getNewPeopleArray(peopleArray, trip, people);
+            tripArray.put(JSON.Trip.people, newPeopleArray);
+        } catch (JSONException e) {
+            return e.getMessage();
+        }
+        Datas datas = new Datas(context);
+        datas.open();
+        datas.deleteTrip(trip.getName());
+        datas.createTrip(trip.getName(), tripArray.toString());
+        datas.close();
+        return "Successfuly Removed";
+    }
+
+    private JSONArray getNewPeopleArray(JSONArray peopleArray, Trip trip, People people) throws JSONException {
+        JSONArray array = new JSONArray();
+        float amount = trip.maxAmountUnsharedPeople();
+        if (people.getIsShared() == false)
+            amount -= people.getMaxAmount();
+        int shared = trip.totalPeopleSharing();
+        if (people.getIsShared())
+            shared -= 1;
+        amount = trip.getEstimateAmount() - amount;
+        amount = amount / shared;
+        for (int i = 0; i < peopleArray.length(); i++) {
+            JSONObject jsonObject = peopleArray.getJSONObject(i);
+            if (jsonObject.getString(JSON.People.name).equals(people.getName())) {
+                continue;
+            }
+            else {
+                if (jsonObject.getBoolean(JSON.People.isShared))
+                    jsonObject.put(JSON.People.maxAmount, amount);
+                array.put(jsonObject);
+            }
+        }
+        return array;
     }
 
 

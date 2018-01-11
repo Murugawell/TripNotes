@@ -12,6 +12,7 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.widget.Toast;
 
+import com.geek4s.tripnotes.bean.JSON;
 import com.geek4s.tripnotes.bean.People;
 import com.geek4s.tripnotes.bean.Trip;
 
@@ -82,7 +83,6 @@ public class Datas {
         cv.put(KEY_NAME, name);
         cv.put(KEY_DATA, data);
         return ourDatabase.insert(DATABASE_TABLE, null, cv);
-
     }
 
     public boolean check(String ch) {
@@ -139,12 +139,12 @@ public class Datas {
             JSONObject jsonObject = new JSONObject(string);
             if (jsonObject == null)
                 return trip;
-            JSONArray peopleArray = jsonObject.getJSONArray("people");
+            JSONArray peopleArray = jsonObject.getJSONArray(JSON.Trip.people);
             People[] peoples = getPeoples(peopleArray);
-            float estimateAmount = (float) jsonObject.getDouble("estimatedamount");
-            long time = jsonObject.getLong("time");
-            String from = jsonObject.getString("from");
-            String to = jsonObject.getString("to");
+            float estimateAmount = (float) jsonObject.getDouble(JSON.Trip.estimatedAmount);
+            long time = jsonObject.getLong(JSON.Trip.time);
+            String from = jsonObject.getString(JSON.Trip.from);
+            String to = jsonObject.getString(JSON.Trip.to);
             if (from.length() <= 0) {
                 from = "From";
             }
@@ -164,10 +164,10 @@ public class Datas {
         try {
             for (int i = 0; i < peopleArray.length(); i++) {
                 JSONObject jsonObject = peopleArray.getJSONObject(i);
-                String name = jsonObject.getString("name");
-                Map<String, Float> map = getAmounts(jsonObject.getJSONArray("amountSpent"));
-                float maxAmount = (float) jsonObject.getDouble("maxamount");
-                boolean isShared = jsonObject.getBoolean("isShared");
+                String name = jsonObject.getString(JSON.People.name);
+                Map<String, Float> map = getAmounts(jsonObject.getJSONArray(JSON.People.amountSpent));
+                float maxAmount = (float) jsonObject.getDouble(JSON.People.maxAmount);
+                boolean isShared = jsonObject.getBoolean(JSON.People.isShared);
                 peoples[i] = new People(name, maxAmount, isShared, map);
             }
         } catch (Exception e) {
@@ -182,8 +182,8 @@ public class Datas {
         try {
             for (int i = 0; i < amountSpent.length(); i++) {
                 JSONObject jsonObject = amountSpent.getJSONObject(i);
-                String amountFor = jsonObject.getString("for");
-                float amount = (float) jsonObject.getDouble("amount");
+                String amountFor = jsonObject.getString(JSON.Amount.amountFor);
+                float amount = (float) jsonObject.getDouble(JSON.Amount.amount);
                 map.put(amountFor, amount);
             }
         } catch (Exception e) {

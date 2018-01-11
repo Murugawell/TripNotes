@@ -228,7 +228,7 @@ public class FoldingCellListAdapter extends ArrayAdapter<Trip> {
             viewHolder.b_triptitle.setOnLongClickListener(new View.OnLongClickListener() {
                 @Override
                 public boolean onLongClick(View view) {
-                    DeleteTrip deleteTrip = new DeleteTrip();
+                    DeleteTrip deleteTrip = new DeleteTrip(getContext());
                     deleteTrip.deleteTripDialog(getContext(), item);
                     DeleteTrip.alert.setOnDismissListener(new DialogInterface.OnDismissListener() {
                         @Override
@@ -244,7 +244,7 @@ public class FoldingCellListAdapter extends ArrayAdapter<Trip> {
             viewHolder.f_triptitle.setOnLongClickListener(new View.OnLongClickListener() {
                 @Override
                 public boolean onLongClick(View view) {
-                    DeleteTrip deleteTrip = new DeleteTrip();
+                    DeleteTrip deleteTrip = new DeleteTrip(getContext());
                     deleteTrip.deleteTripDialog(getContext(), item);
                     DeleteTrip.alert.setOnDismissListener(new DialogInterface.OnDismissListener() {
                         @Override

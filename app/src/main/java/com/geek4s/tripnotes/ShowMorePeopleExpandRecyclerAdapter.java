@@ -230,7 +230,7 @@ public class ShowMorePeopleExpandRecyclerAdapter extends RecyclerView.Adapter<Sh
     }
 
     private void deletePeople(People item) {
-        DeletePeople deletePeople = new DeletePeople();
+        DeletePeople deletePeople = new DeletePeople(context);
         deletePeople.deletePeopleDialog(context, trip, item);
         DeletePeople.alert.setOnDismissListener(new DialogInterface.OnDismissListener() {
             @Override

@@ -94,7 +94,7 @@ public class SpentAmountForRecyclerAdapter extends RecyclerView.Adapter<SpentAmo
     }
 
     private void swapSpentAmount(JSONObject item) {
-        SwapSpentAmount swapSpentAmount = new SwapSpentAmount();
+        SwapSpentAmount swapSpentAmount = new SwapSpentAmount(context);
         List peopleList = getAllPeoplesName(trip);
         swapSpentAmount.swapSpentAMountDialog(context, trip, people, item, peopleList);
         SwapSpentAmount.alert.setOnDismissListener(new DialogInterface.OnDismissListener() {
@@ -120,7 +120,7 @@ public class SpentAmountForRecyclerAdapter extends RecyclerView.Adapter<SpentAmo
     }
 
     private void deleteSpentAmount(JSONObject item) {
-        DeleteSpentAmount deleteSpentAmount = new DeleteSpentAmount();
+        DeleteSpentAmount deleteSpentAmount = new DeleteSpentAmount(context);
         deleteSpentAmount.deleteSpentAmountDialog(context, trip, people, item);
         DeleteSpentAmount.alert.setOnDismissListener(new DialogInterface.OnDismissListener() {
             @Override
@@ -131,7 +131,7 @@ public class SpentAmountForRecyclerAdapter extends RecyclerView.Adapter<SpentAmo
     }
 
     private void updateSpentAmount(JSONObject item) {
-        EditSpentAmount editSpentAmount = new EditSpentAmount();
+        EditSpentAmount editSpentAmount = new EditSpentAmount(context);
         editSpentAmount.editSpentDialog(context, trip, people, item);
         EditSpentAmount.alert.setOnDismissListener(new DialogInterface.OnDismissListener() {
             @Override
