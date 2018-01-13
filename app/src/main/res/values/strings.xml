@@ -35,9 +35,9 @@
     <string name="add_person_hint_share">Share equally</string>
     <string name="add_person_hint_assign_manual">Assign Manually</string>
     <string name="hint_add_amount_person_name">Enter person name</string>
-    <string name="hint_add_amount_for">Enter Amount For</string>
-    <string name="hint_add_amount_value">Enter the amount</string>
-    <string name="estimatedAmount">ESTIMATED</string>
+    <string name="hint_add_amount_for">Enter name of the item you spent</string>
+    <string name="hint_add_amount_value">Enter how much you spent </string>
+    <string name="estimatedAmount">ESTIMATED AMOUNT</string>
     <string name="people_list">PEOPLE</string>
     <string name="created_date">DATE</string>
     <string name="content_created_time">TIME</string>
@@ -59,4 +59,5 @@
     <string name="amount_spent_value">Spent Amount</string>
     <string name="action_help">Help</string>
     <string name="icon">Icon</string>
+    <string name="estimated">ESTIMATE AMOUNT</string>
 </resources>

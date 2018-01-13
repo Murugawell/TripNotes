@@ -52,7 +52,7 @@ public class DeleteTrip {
         String cancelText = "Cancel";
         confirm.setText(Html.fromHtml(confirmText));
         cancel.setText(Html.fromHtml(cancelText));
-        imageview_icon.setImageDrawable(context.getResources().getDrawable(R.drawable.remove_people));
+        imageview_icon.setImageDrawable(context.getResources().getDrawable(R.drawable.ic_delete));
         textView_message.setText(Html.fromHtml(message));
         textView_waring.setText(Html.fromHtml(warning));
         textView_title.setText(Html.fromHtml(title));

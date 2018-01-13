@@ -18,17 +18,29 @@
         android:paddingLeft="20dp"
         android:paddingRight="20dp">
 
-
-        <TextView
-            android:id="@+id/content_people_list_textview"
-            style="@style/ContentTitleText"
-            android:layout_width="wrap_content"
+        <LinearLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_alignParentLeft="true"
             android:layout_alignParentStart="true"
             android:layout_marginTop="10dp"
-            android:text="@string/people_list" />
+            android:orientation="horizontal">
 
+            <TextView
+                android:id="@+id/content_people_list_textview"
+                style="@style/ContentTitleText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="@string/people_list" />
+
+            <ImageButton
+                android:id="@+id/content_people_show_all_imagebtn"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@color/transparent"
+                android:src="@drawable/all_people" />
+        </LinearLayout>
 
         <ImageView
             android:layout_width="match_parent"

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    xmlns:android="http://schemas.android.com/apk/res/android">
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
 
     <ImageView
         android:id="@+id/below_headr_center_image"
@@ -20,6 +20,7 @@
         android:weightSum="3">
 
         <LinearLayout
+            android:id="@+id/content_people_layout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="1"
@@ -46,6 +47,7 @@
         </LinearLayout>
 
         <LinearLayout
+            android:id="@+id/content_estimated_amount_layout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="1"
@@ -58,7 +60,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
-                android:text="@string/estimatedAmount" />
+                android:text="@string/estimated" />
 
             <TextView
                 android:id="@+id/content_estimated_amount"
@@ -70,6 +72,7 @@
         </LinearLayout>
 
         <LinearLayout
+            android:id="@+id/content_spent_amount_layout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="1"

@@ -5,8 +5,12 @@ import android.content.Context;
 import android.support.design.widget.Snackbar;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.FrameLayout;
+import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import com.geek4s.tripnotes.bean.Trip;
@@ -19,37 +23,77 @@ import java.util.Calendar;
 /**
  * Created by Murugavel on 12/22/2017.
  */
-public class AddNewTrip {
+public class EditTrip {
 
     Context context;
     public static AlertDialog alert;
+    public static boolean isCancel;
 
-    AddNewTrip(Context con) {
+    EditTrip(Context con) {
         context = con;
     }
 
-    public void addTripDialog() {
+    public void editTripDialog(Trip t, String option) {
         LayoutInflater li = LayoutInflater.from(context);
         final View promptsView = li.inflate(R.layout.addtrip, null);
         final AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(context);
         alertDialogBuilder.setView(promptsView);
         alertDialogBuilder.setCancelable(false);
         alert = alertDialogBuilder.create();
-        /*Window window = alert.getWindow();
-        alert.getWindow().getAttributes().windowAnimations = R.style.DialogTheme2; //style id
-        WindowManager.LayoutParams wlp = window.getAttributes();*/
+        Window window = alert.getWindow();
+        alert.getWindow().getAttributes().windowAnimations = R.style.DialogTheme1; //style id
+        WindowManager.LayoutParams wlp = window.getAttributes();
         // wlp.gravity = Gravity.BOTTOM;
-//        wlp.flags = WindowManager.LayoutParams.FLAG_DIM_BEHIND;
-//        window.setAttributes(wlp);
+        wlp.flags = WindowManager.LayoutParams.FLAG_DIM_BEHIND;
+        window.setAttributes(wlp);
         final EditText editText_tripName = (EditText) promptsView.findViewById(R.id.add_trip_name);
         final EditText editText_tripEstimateAmount = (EditText) promptsView.findViewById(R.id.add_trip_estimation_amount);
         final EditText editText_tripFrom = (EditText) promptsView.findViewById(R.id.add_trip_from);
         final EditText editText_tripTo = (EditText) promptsView.findViewById(R.id.add_trip_to);
         Button add = (Button) promptsView.findViewById(R.id.trip_add_ok);
         final Button cancel = (Button) promptsView.findViewById(R.id.trip_add_cancel);
-        alert.setTitle("Add New Trip");
-        add.setText("Add");
+        alert.setTitle("Edit Trip");
+        add.setText("Update");
         cancel.setText("Cancel");
+
+
+        editText_tripName.setVisibility(View.GONE);
+        editText_tripEstimateAmount.setVisibility(View.GONE);
+        editText_tripFrom.setVisibility(View.GONE);
+        editText_tripTo.setVisibility(View.GONE);
+        switch (option) {
+            case "all": {
+                editText_tripName.setVisibility(View.VISIBLE);
+                editText_tripEstimateAmount.setVisibility(View.VISIBLE);
+                editText_tripFrom.setVisibility(View.VISIBLE);
+                editText_tripTo.setVisibility(View.VISIBLE);
+                break;
+            }
+            case "fromto": {
+                editText_tripFrom.setVisibility(View.VISIBLE);
+                editText_tripTo.setVisibility(View.VISIBLE);
+                break;
+            }
+            case "from": {
+                editText_tripFrom.setVisibility(View.VISIBLE);
+                break;
+            }
+            case "to": {
+                editText_tripTo.setVisibility(View.VISIBLE);
+                break;
+            }
+            case "estimatedamount": {
+                editText_tripEstimateAmount.setVisibility(View.VISIBLE);
+                break;
+            }
+        }
+
+        editText_tripFrom.setLayoutParams(new FrameLayout.LayoutParams(FrameLayout.LayoutParams.MATCH_PARENT, FrameLayout.LayoutParams.WRAP_CONTENT));
+        editText_tripName.setText(t.getName());
+        editText_tripEstimateAmount.setText(t.getEstimateAmount() + "");
+        editText_tripFrom.setText(t.getFrom());
+        editText_tripTo.setText(t.getTo());
+
         add.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -59,15 +103,17 @@ public class AddNewTrip {
                 from = editText_tripFrom.getText().toString().trim();
                 to = editText_tripTo.getText().toString().trim();
                 if (tripName.trim().length() <= 0) {
-                    Snackbar.make(view, "Please enter trip name to create new trip", Snackbar.LENGTH_SHORT).show();
+                    Snackbar.make(view, "Please enter trip name", Snackbar.LENGTH_SHORT).show();
+                    editText_tripName.requestFocus();
                     editText_tripName.requestFocus();
                 } else if (tripestimateamount.trim().length() <= 0) {
                     Snackbar.make(view, "Please enter estimate amount for this trip", Snackbar.LENGTH_SHORT).show();
                     editText_tripEstimateAmount.requestFocus();
                 } else {
-                    String output = createTrip(tripName, tripestimateamount, from, to);
+                    String output = updateTrip(tripName, tripestimateamount, from, to);
                     Toast.makeText(context, output, Toast.LENGTH_SHORT).show();
-                    if (output.equalsIgnoreCase("Successfully created")) {
+                    isCancel = false;
+                    if (output.equalsIgnoreCase("Successfully updated")) {
                         alert.cancel();
                     }
                 }
@@ -77,6 +123,8 @@ public class AddNewTrip {
         cancel.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+
+                isCancel = true;
                 alert.cancel();
             }
         });
@@ -85,23 +133,17 @@ public class AddNewTrip {
 
     }
 
-    private String createTrip(String tripTitle, String tripEstimateAmount, String from, String to) {
-        String s;
+    private String updateTrip(String tripTitle, String tripEstimateAmount, String from, String to) {
+//     return  successful message as  'Successfully updated'
+        String s = null;
         Datas datas = new Datas(context);
         datas.open();
         JSONObject jsonObject = new JSONObject();
         try {
             Trip check = datas.getTrip(tripTitle);
-            if (check == null) {
-                jsonObject.put("estimatedamount", tripEstimateAmount);
-                jsonObject.put("from", from);
-                jsonObject.put("to", to);
-                jsonObject.put("people", new JSONArray());
-                jsonObject.put("time", Calendar.getInstance().getTimeInMillis());
-                datas.createTrip(tripTitle, jsonObject.toString());
-                s = "Successfully created";
-            } else {
-                s = "Already there is a trip in name of " + tripTitle;
+            if (check != null) {
+//                write your logic here
+                return "Successfully updated";
             }
         } catch (Exception e) {
             s = e.getMessage();

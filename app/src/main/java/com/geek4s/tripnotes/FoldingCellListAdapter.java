@@ -4,6 +4,8 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
+import android.graphics.drawable.Drawable;
+import android.support.v7.widget.CardView;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.Html;
@@ -13,6 +15,7 @@ import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Adapter;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ImageButton;
@@ -58,14 +61,14 @@ public class FoldingCellListAdapter extends ArrayAdapter<Trip> {
 
 
     @Override
-    public View getView(final int position, View convertView, ViewGroup parent) {
+    public View getView(final int position, final View convertView, final ViewGroup parent) {
         // get item for selected view
         final Trip item = getItem(position);
         // if cell is exists - reuse it, if not - create the new one from resource
         FoldingCell cell = (FoldingCell) convertView;
         final ViewHolder viewHolder;
-
         if (cell == null) {
+//            Toast.makeText(context, "" + position, Toast.LENGTH_SHORT).show();
             viewHolder = new ViewHolder();
             LayoutInflater vi = LayoutInflater.from(context);
             cell = (FoldingCell) vi.inflate(R.layout.cell, parent, false);
@@ -95,10 +98,17 @@ public class FoldingCellListAdapter extends ArrayAdapter<Trip> {
             viewHolder.b_showAllPeople = (Button) cell.findViewById(R.id.content_show_all_people);
             viewHolder.b_close = (ImageView) cell.findViewById(R.id.content_header_title_left_icon_imageview);
             viewHolder.b_edit_trip = (ImageButton) cell.findViewById(R.id.content_header_edit_trip_main);
-            viewHolder.b_peopleLayout = (LinearLayout) cell.findViewById(R.id.cell_title_people_layout);
+            viewHolder.b_showallpeoplelistimgbtn = (ImageButton) cell.findViewById(R.id.content_people_show_all_imagebtn);
+            viewHolder.b_peopleLayout = (LinearLayout) cell.findViewById(R.id.content_people_layout);
+            viewHolder.b_estimatedamountLayout = (LinearLayout) cell.findViewById(R.id.content_estimated_amount_layout);
+            viewHolder.b_spentamountLayout = (LinearLayout) cell.findViewById(R.id.content_spent_amount_layout);
             viewHolder.b_peopleInfo = (TextView) cell.findViewById(R.id.content_people_info_textview);
+            viewHolder.b_fromtoaddresscard = (CardView) cell.findViewById(R.id.cell_content_address_card);
 
             viewHolder.f_trip_open_icon = (ImageView) cell.findViewById(R.id.cell_title_open_icon);
+
+
+            viewHolder.b_edit_trip.setVisibility(View.GONE);
 
 
 //            viewHolder.b_addPeople.setBackgroundColor(context.getResources().getColor(R.color.colorPrimaryDark));
@@ -153,6 +163,14 @@ public class FoldingCellListAdapter extends ArrayAdapter<Trip> {
                 @Override
                 public void onClick(View view) {
                     new AddNewPeople(context, viewHolder.b_triptitle.getText().toString()).addPeopleDialog();
+                    AddNewPeople.alert.setOnDismissListener(new DialogInterface.OnDismissListener() {
+                        @Override
+                        public void onDismiss(DialogInterface dialogInterface) {
+                            MainActivity.getTripListFromDB(context);
+                            MainActivity.showListOfTrips(context);
+
+                        }
+                    });
                 }
             });
 
@@ -247,15 +265,25 @@ public class FoldingCellListAdapter extends ArrayAdapter<Trip> {
                 public boolean onLongClick(View view) {
 
                     try {
-                        DeleteTrip deleteTrip = new DeleteTrip(context);
-                        deleteTrip.deleteTripDialog(context, item);
-                        DeleteTrip.alert.setOnDismissListener(new DialogInterface.OnDismissListener() {
+
+                        String[] options = {"", ""};
+                        String title = "";
+                        Drawable[] drawables = {context.getResources().getDrawable(R.drawable.ic_edit), context.getResources().getDrawable(R.drawable.ic_delete)};
+
+                        ShowOptionsDialogs showOptionsDialogs = new ShowOptionsDialogs(context);
+                        showOptionsDialogs.showOptionsDialogMethod(options, title, drawables);
+
+                        ShowOptionsDialogs.alert.setOnDismissListener(new DialogInterface.OnDismissListener() {
                             @Override
                             public void onDismiss(DialogInterface dialogInterface) {
-                                MainActivity.getTripListFromDB(context);
-                                MainActivity.showListOfTrips(context);
+                                if (ShowOptionsDialogs.selectedOption.equalsIgnoreCase("update")) {
+                                    editTrip(context, item, "all");
+                                } else if (ShowOptionsDialogs.selectedOption.equalsIgnoreCase("delete")) {
+                                    deleteTrip(context, item);
+                                }
                             }
                         });
+
                         return false;
                     } catch (Exception e) {
                         e.printStackTrace();
@@ -282,9 +310,14 @@ public class FoldingCellListAdapter extends ArrayAdapter<Trip> {
             viewHolder.f_peopleLayout.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    ShowMorePeopleViewActivity.trip = temptrip;
-                    Intent in = new Intent(context, ShowMorePeopleViewActivity.class);
-                    context.startActivity(in);
+
+                    try {
+                        ShowMorePeopleViewActivity.trip = temptrip;
+                        Intent in = new Intent(context, ShowMorePeopleViewActivity.class);
+                        getContext().startActivity(in);
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
                 }
             });
 
@@ -292,14 +325,73 @@ public class FoldingCellListAdapter extends ArrayAdapter<Trip> {
             viewHolder.f_peopleLayout.setOnLongClickListener(new View.OnLongClickListener() {
                 @Override
                 public boolean onLongClick(View view) {
-                    ShowMorePeopleViewActivity.trip = temptrip;
-                    Intent in = new Intent(context, ShowMorePeopleViewActivity.class);
-                    context.startActivity(in);
+                    try {
+                        ShowMorePeopleViewActivity.trip = temptrip;
+                        Intent in = new Intent(context, ShowMorePeopleViewActivity.class);
+                        getContext().startActivity(in);
+                        return false;
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
                     return false;
                 }
+
             });
             //show all people
             viewHolder.b_showAllPeople.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    try {
+                        ShowMorePeopleViewActivity.trip = temptrip;
+                        Intent in = new Intent(context, ShowMorePeopleViewActivity.class);
+                        getContext().startActivity(in);
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+
+                }
+            });
+
+
+            viewHolder.b_estimatedamountLayout.setOnLongClickListener(new View.OnLongClickListener() {
+                @Override
+                public boolean onLongClick(View view) {
+
+                    editTrip(context, item, "estimatedamount");
+                    return false;
+                }
+            });
+
+
+            viewHolder.f_fromAddress.setOnLongClickListener(new View.OnLongClickListener() {
+                @Override
+                public boolean onLongClick(View view) {
+
+                    editTrip(context, item, "fromto");
+                    return false;
+                }
+            });
+
+            viewHolder.f_toAddress.setOnLongClickListener(new View.OnLongClickListener() {
+                @Override
+                public boolean onLongClick(View view) {
+
+                    editTrip(context, item, "fromto");
+                    return false;
+                }
+            });
+
+            viewHolder.f_estimatedAmount.setOnLongClickListener(new View.OnLongClickListener() {
+                @Override
+                public boolean onLongClick(View view) {
+
+                    editTrip(context, item, "estimatedamount");
+                    return false;
+                }
+            });
+
+
+            viewHolder.b_showallpeoplelistimgbtn.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
                     ShowMorePeopleViewActivity.trip = temptrip;
@@ -309,11 +401,49 @@ public class FoldingCellListAdapter extends ArrayAdapter<Trip> {
                 }
             });
 
+
+            viewHolder.b_fromtoaddresscard.setOnLongClickListener(new View.OnLongClickListener() {
+
+                @Override
+                public boolean onLongClick(View view) {
+                    editTrip(context, item, "fromto");
+                    return false;
+                }
+            });
+
+
         } catch (Exception e) {
             Toast.makeText(context, e.toString(), Toast.LENGTH_LONG).show();
         }
 
         return cell;
+    }
+
+    private void deleteTrip(final Context context, Trip item) {
+
+        DeleteTrip deleteTrip = new DeleteTrip(context);
+        deleteTrip.deleteTripDialog(context, item);
+        DeleteTrip.alert.setOnDismissListener(new DialogInterface.OnDismissListener() {
+            @Override
+            public void onDismiss(DialogInterface dialogInterface) {
+                MainActivity.getTripListFromDB(context);
+                MainActivity.showListOfTrips(context);
+            }
+        });
+    }
+
+    private void editTrip(final Context context, Trip item, String option) {
+        EditTrip editTrip = new EditTrip(context);
+        editTrip.editTripDialog(item, option);
+        EditTrip.alert.setOnDismissListener(new DialogInterface.OnDismissListener() {
+            @Override
+            public void onDismiss(DialogInterface dialogInterface) {
+                if (!EditTrip.isCancel) {
+                    MainActivity.getTripListFromDB(context);
+                    MainActivity.showListOfTrips(context);
+                }
+            }
+        });
     }
 
     private List<People> convertJSONARRAYtoLIST(People[] peoplesJSON) {
@@ -372,11 +502,14 @@ public class FoldingCellListAdapter extends ArrayAdapter<Trip> {
         Button b_addPeople;
         Button b_showAllPeople;
         ImageView b_close;
+        ImageButton b_showallpeoplelistimgbtn;
         ImageButton b_edit_trip;
         LinearLayout b_peopleLayout;
+        LinearLayout b_estimatedamountLayout;
+        LinearLayout b_spentamountLayout;
         LinearLayout f_peopleLayout;
         TextView b_peopleInfo;
-
+        CardView b_fromtoaddresscard;
         ImageView f_trip_open_icon;
     }
 

@@ -40,6 +40,8 @@ public class MainActivity extends AppCompatActivity {
     static ListView theListView;
     private static FoldingCellListAdapter adapter;
     public static FoldingCellListAdapter adap;
+    public static FloatingActionButton fab;
+    private MenuItem helpMenu;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -54,7 +56,7 @@ public class MainActivity extends AppCompatActivity {
 //        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
 //        setSupportActionBar(toolbar);
 
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
+        fab = (FloatingActionButton) findViewById(R.id.fab);
         final Context con = this;
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -64,8 +66,8 @@ public class MainActivity extends AppCompatActivity {
 
                     @Override
                     public void onDismiss(DialogInterface dialogInterface) {
-                        getTripListFromDB(getApplicationContext());
-                        showListOfTrips(getApplicationContext());
+                        getTripListFromDB(con);
+                        showListOfTrips(con);
                     }
                 });
 
@@ -98,7 +100,7 @@ public class MainActivity extends AppCompatActivity {
             da.open();
             allTrips = da.getAllTrips();
             da.close();
-            Collections.reverse(allTrips);
+//            Collections.reverse(allTrips);
 //            Toast.makeText(context, allTrips.size() + "", Toast.LENGTH_LONG).show();
         } catch (Exception e) {
             Toast.makeText(context, e.toString(), Toast.LENGTH_LONG).show();
@@ -148,7 +150,7 @@ public class MainActivity extends AppCompatActivity {
 
             return true;
         } else if (id == R.id.action_refresh) {
-            Toast.makeText(getApplicationContext(), "Trips reloaded", Toast.LENGTH_SHORT).show();
+            Toast.makeText(getApplicationContext(), "Trips Updated", Toast.LENGTH_SHORT).show();
             getTripListFromDB(this);
             showListOfTrips(this);
             return true;
