@@ -23,6 +23,8 @@ public class AddNewTrip {
 
     Context context;
     public static AlertDialog alert;
+    public static String resultAlertAction;
+    public static Trip t;
 
     AddNewTrip(Context con) {
         context = con;
@@ -68,6 +70,7 @@ public class AddNewTrip {
                     String output = createTrip(tripName, tripestimateamount, from, to);
                     Toast.makeText(context, output, Toast.LENGTH_SHORT).show();
                     if (output.equalsIgnoreCase("Successfully created")) {
+                        resultAlertAction = "confirm";
                         alert.cancel();
                     }
                 }
@@ -77,6 +80,7 @@ public class AddNewTrip {
         cancel.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                resultAlertAction = "cancel";
                 alert.cancel();
             }
         });
@@ -103,6 +107,7 @@ public class AddNewTrip {
             } else {
                 s = "Already there is a trip in name of " + tripTitle;
             }
+
         } catch (Exception e) {
             s = e.getMessage();
         }

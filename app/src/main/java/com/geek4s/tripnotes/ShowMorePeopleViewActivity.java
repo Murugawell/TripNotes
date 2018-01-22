@@ -87,7 +87,9 @@ public class ShowMorePeopleViewActivity extends AppCompatActivity {
                     AddNewPeople.alert.setOnDismissListener(new DialogInterface.OnDismissListener() {
                         @Override
                         public void onDismiss(DialogInterface dialogInterface) {
-                            refreshData(getApplicationContext());
+                            if (AddNewPeople.resultAlertAction.equalsIgnoreCase("confirm")) {
+                                refreshData(ShowMorePeopleViewActivity.this);
+                            }
                         }
                     });
                 }
@@ -96,7 +98,7 @@ public class ShowMorePeopleViewActivity extends AppCompatActivity {
             refresh.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    refreshData(getApplicationContext());
+                    refreshData(ShowMorePeopleViewActivity.this);
                     Snackbar.make(view, "Updated successfully", Snackbar.LENGTH_SHORT).show();
                 }
             });

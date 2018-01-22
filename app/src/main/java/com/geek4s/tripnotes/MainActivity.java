@@ -66,8 +66,10 @@ public class MainActivity extends AppCompatActivity {
 
                     @Override
                     public void onDismiss(DialogInterface dialogInterface) {
-                        getTripListFromDB(con);
-                        showListOfTrips(con);
+                        if (AddNewTrip.resultAlertAction.equalsIgnoreCase("confirm")) {
+                            getTripListFromDB(MainActivity.this);
+                            showListOfTrips(MainActivity.this);
+                        }
                     }
                 });
 

@@ -37,7 +37,7 @@ import java.util.List;
 
 public class TripPeopleExpandRecyclerAdapter extends RecyclerView.Adapter<TripPeopleExpandRecyclerAdapter.ViewHolder> {
 
-    private final List<People> data;
+    public static List<People> data;
     FoldingCellListAdapter.ViewHolder viewHolder;
     public Context context;
     private static SparseBooleanArray expandState = new SparseBooleanArray();

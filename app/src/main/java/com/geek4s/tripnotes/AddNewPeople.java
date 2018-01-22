@@ -29,6 +29,8 @@ public class AddNewPeople {
     Context context;
     String tripName;
     public static AlertDialog alert;
+    public static String resultAlertAction;
+
 
     AddNewPeople(Context con, String tripName) {
         context = con;
@@ -99,7 +101,10 @@ public class AddNewPeople {
                     }
                     String s = addPeople(name, b, maxAmount);
                     Toast.makeText(context, s, Toast.LENGTH_LONG).show();
-                    alert.cancel();
+                    if (s.equalsIgnoreCase("Successfully Added")) {
+                        resultAlertAction = "confirm";
+                        alert.cancel();
+                    }
                 }
             }
         });
@@ -107,6 +112,7 @@ public class AddNewPeople {
         cancel.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                resultAlertAction = "cancel";
                 alert.cancel();
             }
         });

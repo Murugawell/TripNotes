@@ -166,8 +166,11 @@ public class FoldingCellListAdapter extends ArrayAdapter<Trip> {
                     AddNewPeople.alert.setOnDismissListener(new DialogInterface.OnDismissListener() {
                         @Override
                         public void onDismiss(DialogInterface dialogInterface) {
-                            MainActivity.getTripListFromDB(context);
-                            MainActivity.showListOfTrips(context);
+                            if (AddNewPeople.resultAlertAction.equalsIgnoreCase("confirm")) {
+
+                                MainActivity.getTripListFromDB(context);
+                                MainActivity.showListOfTrips(context);
+                            }
 
                         }
                     });
@@ -182,8 +185,8 @@ public class FoldingCellListAdapter extends ArrayAdapter<Trip> {
 
             final List<People> peopleList = convertJSONARRAYtoLIST(item.getPeoples());
 
-
-            recyclerView.setAdapter(new TripPeopleExpandRecyclerAdapter(peopleList, item, viewHolder));
+            TripPeopleExpandRecyclerAdapter adapter = new TripPeopleExpandRecyclerAdapter(peopleList, item, viewHolder);
+            recyclerView.setAdapter(adapter);
 
             cell.setTag(viewHolder);
 
