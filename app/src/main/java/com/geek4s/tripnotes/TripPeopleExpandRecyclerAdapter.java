@@ -88,15 +88,16 @@ public class TripPeopleExpandRecyclerAdapter extends RecyclerView.Adapter<TripPe
 
 
         if (balance < 0) {
-            holder.balanceamount.setCompoundDrawablesWithIntrinsicBounds(R.drawable.minus_amount, 0, 0, 0);
-            holder.balanceamount.setTextColor(0xFFFC092E);
+//            holder.balanceamount.setCompoundDrawablesWithIntrinsicBounds(R.drawable.minus_amount, 0, 0, 0);
+            holder.balanceamount.setTextColor(0xFF09FC03);
+
             String msg = "<b><font color=#FF0000>*</font></b> At the end of trip you have to <b><font color=#FF0000>give</font></b>";
             String text = msg + " <b><font color=#ffffff>" + (balance * -1) + "</font></b>";
             holder.amountinfo.setText(Html.fromHtml(text));
 
         } else if (balance > 0) {
-            holder.balanceamount.setCompoundDrawablesWithIntrinsicBounds(R.drawable.plus_amount, 0, 0, 0);
-            holder.balanceamount.setTextColor(0xFF09FC03);
+//            holder.balanceamount.setCompoundDrawablesWithIntrinsicBounds(R.drawable.plus_amount, 0, 0, 0);
+            holder.balanceamount.setTextColor(0xFFFC092E);
 
             String msg = "<b><font color=#FF0000>*</font></b> At the end of trip you will <b><font color=#00FF00>get</font></b>";
             String text = msg + " <b><font color=#ffffff>" + (balance) + "</font></b>";
@@ -110,7 +111,7 @@ public class TripPeopleExpandRecyclerAdapter extends RecyclerView.Adapter<TripPe
         }
         holder.amountinfo.setBackgroundColor(Color.BLACK);
 
-        holder.balanceamount.setText(balance + "");
+        holder.balanceamount.setText(Math.abs(balance) + "");
 
 
         holder.textviewamount.setText(item.getTotalAmountSpent() + "");
