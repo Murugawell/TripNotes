@@ -3,6 +3,7 @@ package com.geek4s.tripnotes;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.support.design.widget.Snackbar;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.Window;
@@ -13,6 +14,7 @@ import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 
+import com.geek4s.tripnotes.bean.JSON;
 import com.geek4s.tripnotes.bean.Trip;
 
 import org.json.JSONArray;
@@ -28,9 +30,12 @@ public class EditTrip {
     Context context;
     public static AlertDialog alert;
     public static boolean isCancel;
+    Trip trip;
 
-    EditTrip(Context con) {
+    EditTrip(Context con, Trip t) {
         context = con;
+        this.trip = t;
+
     }
 
     public void editTripDialog(Trip t, String option) {
@@ -133,22 +138,31 @@ public class EditTrip {
 
     }
 
-    private String updateTrip(String tripTitle, String tripEstimateAmount, String from, String to) {
+    private String updateTrip(String tripName, String tripEstimateAmount, String from, String to) {
 //     return  successful message as  'Successfully updated'
         String s = null;
         Datas datas = new Datas(context);
         datas.open();
-        JSONObject jsonObject = new JSONObject();
         try {
-            Trip check = datas.getTrip(tripTitle);
-            if (check != null) {
-//                write your logic here
+            Trip check = datas.getTrip(tripName);
+            if (check == null || (check.getTime() == trip.getTime())) {
+                JSONObject jsonObject = trip.getTripJSON();
+                JSONArray jsonArrayPeople = trip.getPeoplesJSON();
+                jsonObject.put(JSON.Trip.estimatedAmount, tripEstimateAmount);
+                jsonObject.put(JSON.Trip.from, from);
+                jsonObject.put(JSON.Trip.to, to);
+                jsonObject.put(JSON.Trip.time, trip.getTime());
+                jsonObject.put("people", jsonArrayPeople);
+                datas.deleteTrip(trip.getName());
+                datas.createTrip(tripName, jsonObject.toString());
+                datas.close();
                 return "Successfully updated";
+            } else {
+                return "Already trip is exist. Try with different trip name";
             }
         } catch (Exception e) {
-            s = e.getMessage();
+            datas.close();
+            return e.toString();
         }
-        datas.close();
-        return s;
     }
 }

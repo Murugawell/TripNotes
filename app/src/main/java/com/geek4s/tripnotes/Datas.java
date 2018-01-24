@@ -191,4 +191,12 @@ public class Datas {
         return map;
     }
 
+    public long updateTrip(int id, String name, String data) {
+        String condition = KEY_ROWID + "=" + id;
+        ContentValues cv = new ContentValues();
+        cv.put(KEY_NAME, name);
+        cv.put(KEY_DATA, data);
+        return ourDatabase.update(DATABASE_TABLE, cv, condition, null);
+    }
+
 }

@@ -436,7 +436,7 @@ public class FoldingCellListAdapter extends ArrayAdapter<Trip> {
     }
 
     private void editTrip(final Context context, Trip item, String option) {
-        EditTrip editTrip = new EditTrip(context);
+        EditTrip editTrip = new EditTrip(context, item);
         editTrip.editTripDialog(item, option);
         EditTrip.alert.setOnDismissListener(new DialogInterface.OnDismissListener() {
             @Override
