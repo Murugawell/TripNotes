@@ -37,13 +37,18 @@ import java.util.List;
 
 public class TripPeopleExpandRecyclerAdapter extends RecyclerView.Adapter<TripPeopleExpandRecyclerAdapter.ViewHolder> {
 
-    public static List<People> data;
+    public List<People> data;
     FoldingCellListAdapter.ViewHolder viewHolder;
     public Context context;
     private static SparseBooleanArray expandState = new SparseBooleanArray();
     ;
     Trip trip;
 
+    public TripPeopleExpandRecyclerAdapter(List<People> people) {
+        this.data = people;
+        this.notifyDataSetChanged();
+
+    }
 
     public TripPeopleExpandRecyclerAdapter(final List<People> data, Trip trip, FoldingCellListAdapter.ViewHolder viewHolder) {
         this.data = data;

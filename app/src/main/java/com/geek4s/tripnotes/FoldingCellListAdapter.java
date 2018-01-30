@@ -41,6 +41,9 @@ public class FoldingCellListAdapter extends ArrayAdapter<Trip> {
     private View.OnClickListener defaultRequestBtnClickListener;
     private RecyclerView recyclerView;
     public Context context;
+    private TripPeopleExpandRecyclerAdapter peopleAdapter;
+    private List<People> peopleList;
+    private Trip temptrip;
 
     public FoldingCellListAdapter(Context context, List<Trip> objects) {
         super(context, 0, objects);
@@ -63,7 +66,7 @@ public class FoldingCellListAdapter extends ArrayAdapter<Trip> {
     @Override
     public View getView(final int position, final View convertView, final ViewGroup parent) {
         // get item for selected view
-        final Trip item = getItem(position);
+        final Trip[] item = {getItem(position)};
         // if cell is exists - reuse it, if not - create the new one from resource
         FoldingCell cell = (FoldingCell) convertView;
         final ViewHolder viewHolder;
@@ -167,9 +170,15 @@ public class FoldingCellListAdapter extends ArrayAdapter<Trip> {
                         @Override
                         public void onDismiss(DialogInterface dialogInterface) {
                             if (AddNewPeople.resultAlertAction.equalsIgnoreCase("confirm")) {
-
+/*
                                 MainActivity.getTripListFromDB(context);
-                                MainActivity.showListOfTrips(context);
+                                MainActivity.showListOfTrips(context);*/
+                                item[0] = getTripUpdated(item[0]);
+                                temptrip = item[0];
+                                peopleList = getAllPeople(item[0]);
+                                checkNoPeopleMes(viewHolder, item[0]);
+                                peopleAdapter = new TripPeopleExpandRecyclerAdapter(peopleList, item[0], viewHolder);
+                                recyclerView.setAdapter(peopleAdapter);
                             }
 
                         }
@@ -183,10 +192,10 @@ public class FoldingCellListAdapter extends ArrayAdapter<Trip> {
             recyclerView.addItemDecoration(new DividerItemDecoration(context));
             recyclerView.setLayoutManager(new LinearLayoutManager(context));
 
-            final List<People> peopleList = convertJSONARRAYtoLIST(item.getPeoples());
+            peopleList = convertJSONARRAYtoLIST(item[0].getPeoples());
 
-            TripPeopleExpandRecyclerAdapter adapter = new TripPeopleExpandRecyclerAdapter(peopleList, item, viewHolder);
-            recyclerView.setAdapter(adapter);
+            peopleAdapter = new TripPeopleExpandRecyclerAdapter(peopleList, item[0], viewHolder);
+            recyclerView.setAdapter(peopleAdapter);
 
             cell.setTag(viewHolder);
 
@@ -208,41 +217,28 @@ public class FoldingCellListAdapter extends ArrayAdapter<Trip> {
         try {
             // bind data from selected element to view through view holder
             // front side
-            viewHolder.f_triptitle.setText(item.getName());
-            viewHolder.f_estimatedAmount.setText(item.getEstimateAmount() + "");
-            viewHolder.f_date.setText(getDateTime(item.getTime(), "date"));
-            viewHolder.f_time.setText(getDateTime(item.getTime(), "time"));
-            viewHolder.f_day.setText(getDateTime(item.getTime(), "day"));
-            viewHolder.f_fromAddress.setText(item.getFrom());
-            viewHolder.f_toAddress.setText(item.getTo());
-            viewHolder.f_peopleCount.setText(item.getPeoples().length + "");
-            viewHolder.f_tripAmount.setText(item.getAmountSpent() + "");
+            viewHolder.f_triptitle.setText(item[0].getName());
+            viewHolder.f_estimatedAmount.setText(item[0].getEstimateAmount() + "");
+            viewHolder.f_date.setText(getDateTime(item[0].getTime(), "date"));
+            viewHolder.f_time.setText(getDateTime(item[0].getTime(), "time"));
+            viewHolder.f_day.setText(getDateTime(item[0].getTime(), "day"));
+            viewHolder.f_fromAddress.setText(item[0].getFrom());
+            viewHolder.f_toAddress.setText(item[0].getTo());
+            viewHolder.f_peopleCount.setText(item[0].getPeoples().length + "");
+            viewHolder.f_tripAmount.setText(item[0].getAmountSpent() + "");
 
             // back side
-            viewHolder.b_triptitle.setText(item.getName());
-            viewHolder.b_estimatedAmount.setText(item.getEstimateAmount() + "");
-            viewHolder.b_peopleCount.setText(item.getPeoples().length + "");
-            viewHolder.b_tripAmount.setText(item.getAmountSpent() + "");
-            viewHolder.b_date.setText(getDateTime(item.getTime(), "date"));
-            viewHolder.b_time.setText(getDateTime(item.getTime(), "time"));
-            viewHolder.b_day.setText(getDateTime(item.getTime(), "day"));
-            viewHolder.b_fromAddress.setText(item.getFrom());
-            viewHolder.b_toAddress.setText(item.getTo());
+            viewHolder.b_triptitle.setText(item[0].getName());
+            viewHolder.b_estimatedAmount.setText(item[0].getEstimateAmount() + "");
+            viewHolder.b_peopleCount.setText(item[0].getPeoples().length + "");
+            viewHolder.b_tripAmount.setText(item[0].getAmountSpent() + "");
+            viewHolder.b_date.setText(getDateTime(item[0].getTime(), "date"));
+            viewHolder.b_time.setText(getDateTime(item[0].getTime(), "time"));
+            viewHolder.b_day.setText(getDateTime(item[0].getTime(), "day"));
+            viewHolder.b_fromAddress.setText(item[0].getFrom());
+            viewHolder.b_toAddress.setText(item[0].getTo());
 
-            viewHolder.b_peopleInfo.setTextColor(Color.BLACK);
-            if (item.getPeoples().length == 0) {
-                String txt = "No people available. Click <b><i> Add People</i></b> to add new people in <b>" + item.getName() + "</b> trip";
-                viewHolder.b_peopleInfo.setText(Html.fromHtml(txt));
-                viewHolder.b_peopleInfo.setBackgroundColor(context.getResources().getColor(R.color.btnRequest));
-            } else {
-                viewHolder.b_peopleInfo.setVisibility(View.GONE);
-            }
-            viewHolder.b_showAllPeople.setVisibility(View.GONE);
-            // show all people button ,only if more than 3
-            if (item.getPeoples().length > 3) {
-                viewHolder.b_showAllPeople.setVisibility(View.VISIBLE);
-            }
-
+            checkNoPeopleMes(viewHolder, item[0]);
 
 //            viewHolder.b_close.setBackgroundColor(context.getResources().getColor(R.color.background1));
 
@@ -251,7 +247,7 @@ public class FoldingCellListAdapter extends ArrayAdapter<Trip> {
                 @Override
                 public boolean onLongClick(View view) {
                     DeleteTrip deleteTrip = new DeleteTrip(context);
-                    deleteTrip.deleteTripDialog(context, item);
+                    deleteTrip.deleteTripDialog(context, item[0]);
                     DeleteTrip.alert.setOnDismissListener(new DialogInterface.OnDismissListener() {
                         @Override
                         public void onDismiss(DialogInterface dialogInterface) {
@@ -280,9 +276,9 @@ public class FoldingCellListAdapter extends ArrayAdapter<Trip> {
                             @Override
                             public void onDismiss(DialogInterface dialogInterface) {
                                 if (ShowOptionsDialogs.selectedOption.equalsIgnoreCase("update")) {
-                                    editTrip(context, item, "all");
+                                    editTrip(context, item[0], "all");
                                 } else if (ShowOptionsDialogs.selectedOption.equalsIgnoreCase("delete")) {
-                                    deleteTrip(context, item);
+                                    deleteTrip(context, item[0]);
                                 }
                             }
                         });
@@ -296,7 +292,7 @@ public class FoldingCellListAdapter extends ArrayAdapter<Trip> {
             });
 
 
-            final Trip temptrip = item;
+            temptrip = item[0];
             // show all people , back side people count onclick
             viewHolder.b_peopleCount.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -360,7 +356,7 @@ public class FoldingCellListAdapter extends ArrayAdapter<Trip> {
                 @Override
                 public boolean onLongClick(View view) {
 
-                    editTrip(context, item, "estimatedamount");
+                    editTrip(context, item[0], "estimatedamount");
                     return false;
                 }
             });
@@ -370,7 +366,7 @@ public class FoldingCellListAdapter extends ArrayAdapter<Trip> {
                 @Override
                 public boolean onLongClick(View view) {
 
-                    editTrip(context, item, "fromto");
+                    editTrip(context, item[0], "fromto");
                     return false;
                 }
             });
@@ -379,7 +375,7 @@ public class FoldingCellListAdapter extends ArrayAdapter<Trip> {
                 @Override
                 public boolean onLongClick(View view) {
 
-                    editTrip(context, item, "fromto");
+                    editTrip(context, item[0], "fromto");
                     return false;
                 }
             });
@@ -388,7 +384,7 @@ public class FoldingCellListAdapter extends ArrayAdapter<Trip> {
                 @Override
                 public boolean onLongClick(View view) {
 
-                    editTrip(context, item, "estimatedamount");
+                    editTrip(context, item[0], "estimatedamount");
                     return false;
                 }
             });
@@ -409,7 +405,7 @@ public class FoldingCellListAdapter extends ArrayAdapter<Trip> {
 
                 @Override
                 public boolean onLongClick(View view) {
-                    editTrip(context, item, "fromto");
+                    editTrip(context, item[0], "fromto");
                     return false;
                 }
             });
@@ -420,6 +416,47 @@ public class FoldingCellListAdapter extends ArrayAdapter<Trip> {
         }
 
         return cell;
+    }
+
+    private void checkNoPeopleMes(ViewHolder viewHolder, Trip item) {
+        viewHolder.b_peopleInfo.setTextColor(Color.BLACK);
+        if (item.getPeoples().length == 0) {
+            String txt = "No people available. Click <b><i> Add People</i></b> to add new people in <b>" + item.getName() + "</b> trip";
+            viewHolder.b_peopleInfo.setText(Html.fromHtml(txt));
+            viewHolder.b_peopleInfo.setBackgroundColor(context.getResources().getColor(R.color.btnRequest));
+        } else {
+            viewHolder.b_peopleInfo.setVisibility(View.GONE);
+        }
+        viewHolder.b_showAllPeople.setVisibility(View.GONE);
+        // show all people button ,only if more than 3
+        if (item.getPeoples().length > 3) {
+            viewHolder.b_showAllPeople.setVisibility(View.VISIBLE);
+        }
+
+    }
+
+    private List<People> getAllPeople(Trip item) {
+        Datas datas = new Datas(context);
+        datas.open();
+        Trip t = datas.getTrip(item.getName().toString());
+        if (t != null) {
+            if (t.getPeoples() != null) {
+                return convertJSONARRAYtoLIST(t.getPeoples());
+            }
+        }
+        datas.close();
+        return new ArrayList<>();
+    }
+
+    private Trip getTripUpdated(Trip t) {
+        Datas datas = new Datas(context);
+        datas.open();
+        Trip trip = datas.getTrip(t.getName().toString());
+        if (t != null) {
+            return trip;
+        }
+        datas.close();
+        return null;
     }
 
     private void deleteTrip(final Context context, Trip item) {
